@@ -1,6 +1,6 @@
 # protobuf.ai Website
 
-Marketing website for protobuf.ai - AI-powered Protocol Buffers development.
+Website for protobuf.ai - AI-powered Protocol Buffers development.
 
 ## Overview
 
