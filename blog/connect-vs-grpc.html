@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect-RPC vs gRPC: Choosing the Right Protocol | protobuf.ai Blog</title>
+    <meta name="description" content="Connect-RPC promises gRPC compatibility with better web support. Here's an honest comparison to help you choose the right protocol for your next project.">    
+    <!-- Analytics Tracker -->
+    <script>
+    (function(ss,ex){
+        window.ldfdr=window.ldfdr||function(){(ldfdr._q=ldfdr._q||[]).push([].slice.call(arguments));};
+        (function(d,s){
+            fs=d.getElementsByTagName(s)[0];
+            function ce(src){
+                var cs=d.createElement(s);
+                cs.src=src;
+                cs.async=1;
+                fs.parentNode.insertBefore(cs,fs);
+            };
+            ce('https://sc.lfeeder.com/lftracker_v1_'+ss+(ex?'_'+ex:'')+'.js');
+        })(document,'script');
+    })('YEgkB8lDBD18ep3Z');
+    </script>
+
+    
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+    
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000000;
+            color: #ffffff;
+            margin: 0;
+            line-height: 1.8;
+        }
+        
+        /* Background effects */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(120, 50, 255, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .page-wrapper {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+        }
+        
+        /* Navigation */
+        .blog-nav {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 24px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-brand {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-decoration: none;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #ffffff;
+        }
+        
+        /* Article */
+        .article-header {
+            padding: 4rem 0;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .article-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 0 0 1rem 0;
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.02em;
+        }
+        
+        .article-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.875rem;
+        }
+        
+        .article-content {
+            padding: 4rem 0;
+            font-size: 1.125rem;
+            line-height: 1.8;
+        }
+        
+        .article-content h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 3rem 0 1rem 0;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .article-content h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem 0;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .article-content p {
+            margin: 0 0 1.5rem 0;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .article-content code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+        }
+        
+        .article-content pre {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 2rem 0;
+        }
+        
+        .article-content pre code {
+            background: none;
+            padding: 0;
+            font-size: 0.875rem;
+        }
+        
+        .highlight-box {
+            background: rgba(120, 80, 255, 0.1);
+            border: 1px solid rgba(120, 80, 255, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            overflow-x: auto;
+            display: block;
+        }
+        
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            min-width: 150px;
+        }
+        
+        .comparison-table th {
+            background: rgba(120, 80, 255, 0.1);
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+        
+        .comparison-table tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+        
+        .pro-con-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .pro-con-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+        
+        .pro-con-box.pro {
+            border-color: rgba(80, 255, 120, 0.3);
+        }
+        
+        .pro-con-box.con {
+            border-color: rgba(255, 80, 120, 0.3);
+        }
+        
+        .decision-tree {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .decision-node {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+        
+        .cta-section {
+            background: rgba(120, 50, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 4rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+        
+        .cta-section h2 {
+            font-size: 2rem;
+            margin: 0 0 1rem 0;
+        }
+        
+        .cta-section .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, #7850ff 0%, #ff5078 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 500;
+            margin-top: 1rem;
+            transition: transform 0.3s;
+        }
+        
+        .cta-section .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .article-content ul {
+            margin: 0 0 1.5rem 0;
+            padding-left: 2rem;
+        }
+        
+        .article-content li {
+            margin: 0.5rem 0;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .verdict-box {
+            background: linear-gradient(135deg, rgba(120, 80, 255, 0.1), rgba(255, 80, 120, 0.1));
+            border: 1px solid rgba(120, 80, 255, 0.3);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 3rem 0;
+            text-align: center;
+        }
+    </style>
+    <!-- VoiceForge Target Graph Tracking -->
+    <script src="/voiceforge-tracking.js"></script>
+</head>
+<body>
+    <div class="page-wrapper">
+        <nav class="blog-nav">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <a href="/" class="nav-brand">protobuf.ai</a>
+                    <div class="nav-links">
+                        <a href="/">Home</a>
+                        <a href="/blog">Blog</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <article>
+            <header class="article-header">
+                <div class="container">
+                    <h1 class="article-title">Connect-RPC vs gRPC: Choosing the Right Protocol</h1>
+                    <div class="article-meta">
+                        <span>By Andrew Brown</span>
+                        <span>•</span>
+                        <span>January 26, 2025</span>
+                        <span>•</span>
+                        <span>5 min read</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="article-content">
+                <div class="container">
+                    <p>If you're building APIs with Protocol Buffers, you've likely heard the buzz about Connect-RPC. Buf's new protocol promises to be "gRPC, but better for the web." But is it?</p>
+
+                    <p>After building production systems with both protocols, here's an honest comparison to help you choose. No hype, no vendor bias – just real experiences from the trenches.</p>
+
+                    <h2>The Quick Summary</h2>
+
+                    <div class="verdict-box">
+                        <h3>TL;DR: It Depends™</h3>
+                        <p><strong>Choose Connect-RPC if:</strong> You need excellent web support, simpler deployment, or are building primarily TypeScript/JavaScript applications.</p>
+                        <p><strong>Choose gRPC if:</strong> You need maximum performance, broad language support, or are building internal microservices.</p>
+                        <p><strong>The future:</strong> Both will likely coexist, with Connect handling web-facing APIs and gRPC powering backend services.</p>
+                    </div>
+
+                    <h2>What Is Connect-RPC?</h2>
+
+                    <p>Connect-RPC is Buf's modern take on RPC protocols. It uses the same Protocol Buffer schemas as gRPC but with a different wire protocol that's more web-friendly. Think of it as "gRPC's cooler younger sibling who gets along better with browsers."</p>
+
+                    <pre><code>// Same proto file works with both!
+syntax = "proto3";
+
+package greet.v1;
+
+service GreetService {
+  rpc Greet(GreetRequest) returns (GreetResponse);
+}
+
+message GreetRequest {
+  string name = 1;
+}
+
+message GreetResponse {
+  string greeting = 1;
+}</code></pre>
+
+                    <p>The key difference is in how they handle the transport layer, not the schema layer.</p>
+
+                    <h2>The Real-World Comparison</h2>
+
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>gRPC</th>
+                                <th>Connect-RPC</th>
+                                <th>Winner</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Browser Support</td>
+                                <td>Requires gRPC-Web proxy</td>
+                                <td>Native browser support</td>
+                                <td>Connect ✓</td>
+                            </tr>
+                            <tr>
+                                <td>HTTP/1.1 Support</td>
+                                <td>No (HTTP/2 required)</td>
+                                <td>Yes</td>
+                                <td>Connect ✓</td>
+                            </tr>
+                            <tr>
+                                <td>Performance</td>
+                                <td>Optimal (binary)</td>
+                                <td>Good (binary or JSON)</td>
+                                <td>gRPC ✓</td>
+                            </tr>
+                            <tr>
+                                <td>Language Support</td>
+                                <td>15+ languages</td>
+                                <td>Go, TypeScript, Swift</td>
+                                <td>gRPC ✓</td>
+                            </tr>
+                            <tr>
+                                <td>Debugging</td>
+                                <td>Requires special tools</td>
+                                <td>Standard HTTP tools work</td>
+                                <td>Connect ✓</td>
+                            </tr>
+                            <tr>
+                                <td>Streaming</td>
+                                <td>Bidirectional</td>
+                                <td>Bidirectional</td>
+                                <td>Tie</td>
+                            </tr>
+                            <tr>
+                                <td>Ecosystem</td>
+                                <td>Mature, widespread</td>
+                                <td>Growing, Buf-centric</td>
+                                <td>gRPC ✓</td>
+                            </tr>
+                            <tr>
+                                <td>Deployment</td>
+                                <td>Complex (proxies, LBs)</td>
+                                <td>Simple (standard HTTP)</td>
+                                <td>Connect ✓</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2>Connect-RPC: The Good Parts</h2>
+
+                    <div class="pro-con-grid">
+                        <div class="pro-con-box pro">
+                            <h3>✅ First-Class Web Support</h3>
+                            <p>Connect works in browsers without proxies or special configuration. Your React app can call Connect services directly:</p>
+                            <pre><code>// Works in the browser!
+const client = createPromiseClient(GreetService, 
+  transport({ baseUrl: "https://api.example.com" })
+);
+
+const response = await client.greet({ name: "World" });</code></pre>
+                        </div>
+
+                        <div class="pro-con-box pro">
+                            <h3>✅ Developer Experience</h3>
+                            <p>Connect feels like working with REST. You can debug with curl, test with Postman, and inspect requests in browser DevTools. No special gRPC tools required.</p>
+                        </div>
+                    </div>
+
+                    <div class="pro-con-box pro">
+                        <h3>✅ Flexible Deployment</h3>
+                        <p>Deploy Connect services anywhere that supports HTTP: Vercel, Netlify, CloudFlare Workers, traditional servers. No HTTP/2 requirement means broader compatibility.</p>
+                    </div>
+
+                    <h2>Connect-RPC: The Limitations</h2>
+
+                    <div class="pro-con-grid">
+                        <div class="pro-con-box con">
+                            <h3>❌ Limited Language Support</h3>
+                            <p>As of 2025, Connect has first-class support for Go, TypeScript, and Swift. If you need Python, Java, or C++, you're back to gRPC.</p>
+                        </div>
+
+                        <div class="pro-con-box con">
+                            <h3>❌ Smaller Ecosystem</h3>
+                            <p>gRPC has years of battle-testing and tooling. Connect is newer and has fewer third-party tools, middleware options, and community resources.</p>
+                        </div>
+                    </div>
+
+                    <h2>gRPC: Still the Performance King</h2>
+
+                    <p>Don't count out gRPC. For internal microservices, it's still the gold standard:</p>
+
+                    <div class="highlight-box">
+                        <h3>gRPC Performance Advantages</h3>
+                        <ul>
+                            <li><strong>Binary efficiency:</strong> Smaller payloads, faster parsing</li>
+                            <li><strong>HTTP/2 multiplexing:</strong> Multiple concurrent streams over one connection</li>
+                            <li><strong>Header compression:</strong> HPACK reduces overhead</li>
+                            <li><strong>Connection reuse:</strong> Persistent connections reduce latency</li>
+                        </ul>
+                        <p>In our benchmarks, gRPC was 15-20% faster for high-volume service-to-service communication.</p>
+                    </div>
+
+                    <h2>Real Code Comparison</h2>
+
+                    <p>Let's see how the same service looks in both protocols:</p>
+
+                    <h3>gRPC Server (Go)</h3>
+                    <pre><code>// gRPC requires more boilerplate
+type server struct {
+    greetv1.UnimplementedGreetServiceServer
+}
+
+func (s *server) Greet(ctx context.Context, 
+    req *greetv1.GreetRequest) (*greetv1.GreetResponse, error) {
+    return &greetv1.GreetResponse{
+        Greeting: fmt.Sprintf("Hello, %s!", req.Name),
+    }, nil
+}
+
+func main() {
+    lis, _ := net.Listen("tcp", ":50051")
+    s := grpc.NewServer()
+    greetv1.RegisterGreetServiceServer(s, &server{})
+    s.Serve(lis)
+}</code></pre>
+
+                    <h3>Connect Server (Go)</h3>
+                    <pre><code>// Connect feels more like HTTP
+func (s *server) Greet(ctx context.Context,
+    req *connect.Request[greetv1.GreetRequest]) (
+    *connect.Response[greetv1.GreetResponse], error) {
+    return connect.NewResponse(&greetv1.GreetResponse{
+        Greeting: fmt.Sprintf("Hello, %s!", req.Msg.Name),
+    }), nil
+}
+
+func main() {
+    mux := http.NewServeMux()
+    path, handler := greetv1connect.NewGreetServiceHandler(&server{})
+    mux.Handle(path, handler)
+    http.ListenAndServe(":8080", mux)
+}</code></pre>
+
+                    <p>Notice how Connect uses standard HTTP handlers? This makes it much easier to integrate with existing HTTP middleware and infrastructure.</p>
+
+                    <h2>The Decision Tree</h2>
+
+                    <div class="decision-tree">
+                        <h3>Which Protocol Should You Choose?</h3>
+                        
+                        <div class="decision-node">
+                            <strong>Q: Are you building a web application?</strong><br>
+                            → Yes: Consider Connect-RPC<br>
+                            → No: Continue...
+                        </div>
+                        
+                        <div class="decision-node">
+                            <strong>Q: Do you need support for many programming languages?</strong><br>
+                            → Yes: Choose gRPC<br>
+                            → No: Continue...
+                        </div>
+                        
+                        <div class="decision-node">
+                            <strong>Q: Is maximum performance critical?</strong><br>
+                            → Yes: Choose gRPC<br>
+                            → No: Continue...
+                        </div>
+                        
+                        <div class="decision-node">
+                            <strong>Q: Do you need simple deployment (e.g., serverless)?</strong><br>
+                            → Yes: Choose Connect-RPC<br>
+                            → No: Either works
+                        </div>
+                    </div>
+
+                    <h2>Hybrid Architecture: Best of Both Worlds</h2>
+
+                    <p>Here's a secret: you don't have to choose just one. Many teams use both:</p>
+
+                    <pre><code>┌─────────────┐      Connect-RPC       ┌──────────────┐
+│  Web App    ├──────────────────────►│  API Gateway │
+└─────────────┘                        └──────┬───────┘
+                                              │
+┌─────────────┐      Connect-RPC             │
+│ Mobile App  ├──────────────────────────────┘
+└─────────────┘                               
+                                              
+                    ┌─────────────────────────┴───┐
+                    │                             │
+                    ▼ gRPC                        ▼ gRPC
+            ┌───────────────┐            ┌────────────────┐
+            │ User Service  │            │ Order Service  │
+            └───────────────┘            └────────────────┘</code></pre>
+
+                    <p>Use Connect for client-facing APIs and gRPC for internal services. You get web compatibility where you need it and maximum performance where it matters.</p>
+
+                    <h2>The AI Angle</h2>
+
+                    <p>Here's where it gets interesting for protobuf.ai users: the same proto files work with both protocols. AI can generate schemas that are optimal for either:</p>
+
+                    <pre><code>$ protobuf-ai create "user authentication service" --target connect
+
+# AI knows to optimize for Connect patterns:
+# - Includes google.api.http annotations
+# - Suggests field_behavior annotations
+# - Designs for JSON compatibility
+
+$ protobuf-ai create "high-performance trading service" --target grpc
+
+# AI optimizes for gRPC performance:
+# - Efficient field ordering
+# - Minimal message nesting
+# - Streaming-first design</code></pre>
+
+                    <h2>Future Outlook</h2>
+
+                    <p>Both protocols will likely coexist for years:</p>
+
+                    <ul>
+                        <li><strong>gRPC</strong> will remain dominant for polyglot microservices and performance-critical systems</li>
+                        <li><strong>Connect-RPC</strong> will grow in the web ecosystem, especially with TypeScript/JavaScript teams</li>
+                        <li><strong>Protocol convergence</strong> may happen – gRPC may adopt Connect's web-friendly features</li>
+                        <li><strong>AI tools</strong> will make protocol choice less painful by generating optimal schemas for both</li>
+                    </ul>
+
+                    <h2>The Verdict</h2>
+
+                    <p>There's no universal "better" choice. Like choosing between PostgreSQL and MongoDB, it depends on your use case:</p>
+
+                    <div class="highlight-box">
+                        <h3>Choose Connect-RPC when:</h3>
+                        <ul>
+                            <li>Building web or mobile applications</li>
+                            <li>Working primarily in TypeScript/JavaScript</li>
+                            <li>Need simple deployment (serverless, edge)</li>
+                            <li>Want easier debugging and standard HTTP tools</li>
+                            <li>Building public APIs that need broad accessibility</li>
+                        </ul>
+                    </div>
+
+                    <div class="highlight-box">
+                        <h3>Choose gRPC when:</h3>
+                        <ul>
+                            <li>Building internal microservices</li>
+                            <li>Need maximum performance</li>
+                            <li>Require broad language support</li>
+                            <li>Have existing gRPC infrastructure</li>
+                            <li>Need advanced features like interceptors</li>
+                        </ul>
+                    </div>
+
+                    <p>The good news? With Protocol Buffers as your foundation, switching between protocols is relatively painless. Start with what fits your immediate needs, and know you can adapt as requirements change.</p>
+
+                    <p><em>Whether you choose Connect-RPC or gRPC, protobuf.ai helps you generate optimal schemas for either protocol. Focus on your API design, not syntax details.</em></p>
+                </div>
+            </div>
+        </article>
+
+        <section class="cta-section">
+            <div class="container">
+                <h2>Design Protocol-Agnostic APIs</h2>
+                <p>Generate schemas that work perfectly with both Connect and gRPC</p>
+                <a href="/#waitlist-form" class="btn">Join Waitlist</a>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

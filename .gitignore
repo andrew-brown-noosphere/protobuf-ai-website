@@ -1,0 +1,29 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
+
+# Build/deploy
+.vercel/
+.netlify/
+dist/
+
+# Temporary
+tmp/
+temp/
+*.tmp
+
+# Scripts
+add-tracking.sh
