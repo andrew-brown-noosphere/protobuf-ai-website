@@ -41,6 +41,23 @@ python -m http.server 8000
 npx serve .
 ```
 
+## Environment Variables
+
+Copy `.env.example` to `.env` (or add the same keys in the Vercel dashboard) and populate:
+
+- `RESEND_API_KEY` – Resend secret required for both the waitlist notification email and inbound forwarding.
+- `WAITLIST_FORWARD_TO` – Inbox that receives new `/api/waitlist` submissions (defaults to `andrew@protobuf.ai`).
+- `OPENAI_API_KEY` – Optional; enables the AI-generated confirmation message on the landing page.
+- `RESEND_INBOUND_FORWARD_TO` – Optional comma-separated list of real inboxes that should receive forwarded inbound mail processed by `/api/resend-inbound`.
+
+## Resend Inbound Email Setup
+
+1. In Resend, enable **Inbound Email** for `protobuf.ai`, update the MX records, and wait for verification.
+2. Configure a webhook destination in Resend that points to `https://<your-deployment>/api/resend-inbound` (or `http://localhost:3000/api/resend-inbound` when testing with `vercel dev`).
+3. Set `RESEND_API_KEY` and `RESEND_INBOUND_FORWARD_TO` in `.env`/Vercel so the function can forward real messages to your inbox.
+4. Deploy to Vercel. Every `email.received` payload is logged and (if configured) re-sent via Resend’s send API; other event types immediately return `{ "ignored": true }`.
+5. Tail the function logs (`vercel logs api/resend-inbound`) while sending a test message to confirm the payload and forwarded copy look correct.
+
 ## Analytics
 
 - LeadFeeder tracking: For general visitor intelligence
