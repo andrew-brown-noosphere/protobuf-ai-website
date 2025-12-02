@@ -16,7 +16,7 @@ const fallbackResponse = (name, useCase, message) => {
       ? 'building AI-driven schema workflows'
       : 'designing reliable protobuf workflows');
 
-  return `Thanks for joining the protobuf.ai waitlist, ${name}! We noted your focus on ${focus}. Andrew will follow up with roadmap details soon.`;
+  return `Thanks for joining the protobuf.ai waitlist, ${name}! We noted your focus on ${focus}. We'll reach out with roadmap details soon.`;
 };
 
 module.exports = async function handler(req, res) {
