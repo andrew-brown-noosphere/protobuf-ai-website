@@ -515,6 +515,133 @@
             margin-top: 1.5rem;
         }
 
+        /* Waitlist Form */
+        .waitlist-section {
+            padding: 4rem 0 5rem;
+            background: linear-gradient(to bottom, var(--slate-50), white);
+        }
+
+        .waitlist-card {
+            max-width: 32rem;
+            margin: 0 auto;
+            background: white;
+            border: 1px solid var(--slate-200);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+
+        .waitlist-card h2 {
+            font-family: 'Source Serif 4', ui-serif, Georgia, serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--orange-900);
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .waitlist-card > p {
+            color: var(--slate-600);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .waitlist-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.375rem;
+        }
+
+        .form-group label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--slate-700);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.625rem 0.875rem;
+            border: 1px solid var(--slate-300);
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-family: inherit;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--orange-600);
+            box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 4rem;
+        }
+
+        .waitlist-submit {
+            margin-top: 0.5rem;
+        }
+
+        .waitlist-submit .btn {
+            width: 100%;
+            padding: 0.75rem 1.5rem;
+        }
+
+        .waitlist-submit .btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .form-success {
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .form-success h3 {
+            font-family: 'Source Serif 4', ui-serif, Georgia, serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--orange-900);
+            margin-bottom: 0.75rem;
+        }
+
+        .form-success p {
+            color: var(--slate-600);
+            line-height: 1.6;
+        }
+
+        .form-error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            text-align: center;
+        }
+
         /* Footer */
         footer {
             background: var(--slate-950);
@@ -582,7 +709,7 @@
                         <li><a href="/">Home</a></li>
                         <li><a href="/blog/">Blog</a></li>
                         <li><a href="https://github.com/protobuf-ai/">GitHub</a></li>
-                        <li><a href="https://registry.protobuf.ai" class="btn btn-primary">Open Registry</a></li>
+                        <li><a href="#waitlist" class="btn btn-primary">Join Waitlist</a></li>
                     </ul>
                 </div>
             </div>
@@ -611,7 +738,7 @@
                     </div>
                 </div>
                 <div class="hero-cta">
-                    <a href="https://registry.protobuf.ai" class="btn btn-primary">Explore the Registry <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
+                    <a href="#waitlist" class="btn btn-primary">Join the Waitlist <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
                     <a href="https://github.com/protobuf-ai/" class="btn btn-ghost">View on GitHub</a>
                 </div>
             </div>
@@ -726,14 +853,60 @@
             </div>
         </section>
 
-        <section class="cta-section">
+        <section class="waitlist-section" id="waitlist">
             <div class="container">
-                <h2>Ready for AI-native schemas?</h2>
-                <p>Import your existing schemas. We'll add the meaning.</p>
-                <p>Stop letting AI guess what your data structures mean. Give them the semantic context they need to get integrations right the first time.</p>
-                <div class="cta-buttons">
-                    <a href="https://registry.protobuf.ai" class="btn btn-primary">Get Started Free <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
-                    <a href="/" class="btn btn-outline">Learn About context.json</a>
+                <div class="waitlist-card">
+                    <h2>Join the Early Access Waitlist</h2>
+                    <p>Be the first to try the semantic schema registry. We're onboarding teams now.</p>
+
+                    <form class="waitlist-form" id="waitlist-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Name *</label>
+                                <input type="text" id="name" name="name" required placeholder="Your name">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email *</label>
+                                <input type="email" id="email" name="email" required placeholder="you@company.com">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="company">Company</label>
+                            <input type="text" id="company" name="company" placeholder="Your company (optional)">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="useCase">Primary Use Case *</label>
+                            <select id="useCase" name="useCase" required>
+                                <option value="">Select your use case...</option>
+                                <option value="rapid-prototyping">Rapid Prototyping - ship schemas faster</option>
+                                <option value="team-development">Team Development - coordinate schema changes</option>
+                                <option value="api-design">API Design - design before implementation</option>
+                                <option value="migration">Migration - modernize legacy protobufs</option>
+                                <option value="learning">Learning - level up proto expertise</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Anything else? (optional)</label>
+                            <textarea id="message" name="message" placeholder="Tell us about your schema workflow..."></textarea>
+                        </div>
+
+                        <div class="waitlist-submit">
+                            <button type="submit" class="btn btn-primary" id="submit-btn">
+                                Join Waitlist
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                            </button>
+                        </div>
+
+                        <div id="form-message" style="display: none;"></div>
+                    </form>
+
+                    <div class="form-success" id="form-success" style="display: none;">
+                        <h3>You're on the list!</h3>
+                        <p id="success-message"></p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -755,5 +928,60 @@
             </div>
         </div>
     </footer>
+    <script src="/tracking.js" data-org="protobuf"></script>
+    <script>
+    document.getElementById('waitlist-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const form = e.target;
+        const submitBtn = document.getElementById('submit-btn');
+        const formMessage = document.getElementById('form-message');
+        const formSuccess = document.getElementById('form-success');
+        const successMessage = document.getElementById('success-message');
+
+        // Disable button and show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'Submitting...';
+        formMessage.style.display = 'none';
+
+        const formData = {
+            name: form.name.value.trim(),
+            email: form.email.value.trim(),
+            company: form.company.value.trim() || undefined,
+            useCase: form.useCase.value,
+            message: form.message.value.trim() || undefined
+        };
+
+        try {
+            const response = await fetch('/api/waitlist', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                // Hide form, show success
+                form.style.display = 'none';
+                successMessage.textContent = data.aiResponse || 'Thanks for joining! We\'ll be in touch soon.';
+                formSuccess.style.display = 'block';
+            } else {
+                // Show error
+                formMessage.className = 'form-error';
+                formMessage.textContent = data.error || 'Something went wrong. Please try again.';
+                formMessage.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Join Waitlist <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>';
+            }
+        } catch (err) {
+            formMessage.className = 'form-error';
+            formMessage.textContent = 'Network error. Please check your connection and try again.';
+            formMessage.style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = 'Join Waitlist <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>';
+        }
+    });
+    </script>
 </body>
 </html>
