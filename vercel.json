@@ -1,5 +1,5 @@
 {
-  "rewrites": [
+  "redirects": [
     {
       "source": "/",
       "destination": "/registry.html",
@@ -8,7 +8,8 @@
           "type": "host",
           "value": "registry.protobuf.ai"
         }
-      ]
+      ],
+      "permanent": false
     }
   ]
 }
