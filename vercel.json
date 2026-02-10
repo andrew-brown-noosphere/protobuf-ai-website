@@ -1,9 +1,14 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
-      "has": [{ "type": "host", "value": "registry.protobuf.ai" }],
-      "destination": "/registry.html"
+      "source": "/",
+      "destination": "/registry.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "registry.protobuf.ai"
+        }
+      ]
     }
   ]
 }
