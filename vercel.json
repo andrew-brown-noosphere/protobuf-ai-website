@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "registry.protobuf.ai" }],
+      "destination": "/registry.html"
+    }
+  ]
+}
