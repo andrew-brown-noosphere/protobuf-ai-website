@@ -3,1303 +3,886 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>protobuf.ai - AI-Powered Protocol Buffers</title>
-    <meta name="description" content="Generate Protocol Buffers from natural language. Zero syntax errors. Works with all your tools.">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="protobuf.ai - AI-Powered Protocol Buffers">
-    <meta property="og:description" content="Generate Protocol Buffers from natural language. Zero syntax errors.">
+    <title>protobuf.ai — Protocol Buffers for the AI Era</title>
+    <meta name="description" content="AI agents can read your schemas but can't understand them. context.json adds the semantic layer that makes your APIs AI-native.">
+    <meta name="author" content="protobuf.ai">
+
+    <meta property="og:title" content="protobuf.ai — Protocol Buffers for the AI Era">
+    <meta property="og:description" content="Make your APIs AI-native with context.json - the semantic layer for Protocol Buffers.">
     <meta property="og:url" content="https://protobuf.ai">
     <meta property="og:type" content="website">
-    
-    <!-- Analytics Tracker -->
-    <script>
-    (function(ss,ex){
-        window.ldfdr=window.ldfdr||function(){(ldfdr._q=ldfdr._q||[]).push([].slice.call(arguments));};
-        (function(d,s){
-            fs=d.getElementsByTagName(s)[0];
-            function ce(src){
-                var cs=d.createElement(s);
-                cs.src=src;
-                cs.async=1;
-                fs.parentNode.insertBefore(cs,fs);
-            };
-            ce('https://sc.lfeeder.com/lftracker_v1_'+ss+(ex?'_'+ex:'')+'.js');
-        })(document,'script');
-    })('YEgkB8lDBD18ep3Z');
-    </script>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
-    
-    <!-- Syntax Highlighting -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-protobuf.min.js"></script>
-    
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@protobufai">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+
     <style>
-        * {
-            box-sizing: border-box;
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
+            --slate-400: #94a3b8;
+            --slate-500: #64748b;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
+            --slate-950: #020617;
+            --orange-50: #fff7ed;
+            --orange-100: #ffedd5;
+            --orange-600: #ea580c;
+            --orange-700: #c2410c;
+            --orange-800: #9a3412;
+            --orange-900: #7c2d12;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #000000;
-            color: #ffffff;
-            margin: 0;
+            font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
             line-height: 1.6;
-        }
-
-        /* Background texture */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: 
-                radial-gradient(circle at 20% 50%, rgba(120, 50, 255, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(50, 120, 255, 0.08) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        /* Noise texture */
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        .page-wrapper {
-            position: relative;
-            z-index: 10;
-            min-height: 100vh;
-            width: 100%;
-        }
-
-        /* Navigation */
-        .main-nav {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 24px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            color: var(--slate-900);
+            background: var(--slate-950);
+            -webkit-font-smoothing: antialiased;
         }
 
         .container {
-            width: 100%;
-            max-width: none;
-            margin: 0;
-            padding: 0 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
         }
 
-        .nav-wrapper {
+        /* Header */
+        header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(to bottom right, var(--slate-950), var(--slate-900), var(--slate-950));
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: 0.3;
+            background:
+                radial-gradient(circle at top right, rgba(92, 240, 217, 0.15), transparent 35%),
+                radial-gradient(circle at 20% 30%, rgba(247, 181, 0, 0.12), transparent 30%);
+            pointer-events: none;
+        }
+
+        /* Nav */
+        .nav {
+            position: relative;
+            padding: 1.5rem 0;
+        }
+
+        .nav-inner {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .nav-brand {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
             text-decoration: none;
-            font-family: 'Space Grotesk', sans-serif;
-            letter-spacing: -0.02em;
+        }
+
+        .nav-brand-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: white;
+            letter-spacing: -0.025em;
         }
 
         .nav-links {
             display: flex;
-            gap: 3rem;
+            gap: 1.5rem;
             align-items: center;
+            list-style: none;
         }
 
         .nav-links a {
             color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
-            font-weight: 500;
             font-size: 0.875rem;
-            transition: color 0.3s;
+            font-weight: 500;
+            transition: color 0.2s;
         }
 
         .nav-links a:hover {
-            color: #ffffff;
-        }
-
-        /* Hero Section */
-        .hero-section {
-            padding: 120px 0 100px;
-            min-height: 80vh;
-            position: relative;
-            z-index: 10;
-        }
-
-        .hero-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .hero-text {
-            position: relative;
-            z-index: 10;
-        }
-
-        .hero-title {
-            font-size: 5rem;
-            font-weight: 700;
-            line-height: 1.1;
-            margin: 0 0 1.5rem 0;
-            font-family: 'Space Grotesk', sans-serif;
-            letter-spacing: -0.03em;
-            background: linear-gradient(135deg, #ffffff 0%, #ffffff 50%, rgba(120, 80, 255, 0.9) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradient 8s ease infinite;
-            background-size: 200% auto;
-        }
-
-        @keyframes gradient {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
-        }
-
-        .hero-subtitle {
-            font-size: 1.25rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin: 0 0 3rem 0;
-            line-height: 1.8;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: flex-start;
-            position: relative;
-            z-index: 10;
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 1rem 2.5rem;
-            text-decoration: none;
-            border-radius: 50px;
-            font-family: 'JetBrains Mono', 'Courier New', monospace;
-            font-weight: 400;
-            font-size: 0.875rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #7850ff 0%, #5040ff 50%, #ff5078 100%);
-            background-size: 200% auto;
             color: white;
         }
 
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1.25rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--orange-700);
+            color: white;
         }
 
         .btn-primary:hover {
-            background-position: right center;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(120, 80, 255, 0.4);
+            background: var(--orange-600);
         }
 
-        .btn-primary:hover::before {
-            left: 100%;
-        }
-
-        .btn-secondary {
+        .btn-outline {
             background: transparent;
-            color: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--orange-800);
+            border: 1px solid var(--orange-700);
         }
 
-        .btn-secondary:hover {
+        .btn-outline:hover {
+            background: var(--orange-50);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: white;
+        }
+
+        .btn-ghost:hover {
             background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.5);
-            transform: translateY(-2px);
         }
 
-        /* Code Block */
-        .hero-code {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 2rem;
+        /* Hero */
+        .hero {
             position: relative;
+            padding: 2rem 0 4rem;
         }
 
-        .code-header {
-            display: flex;
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        @media (max-width: 1024px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .hero-content {
+            color: white;
+        }
+
+        .hero-badge {
+            display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            padding: 0.375rem 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 600;
+            line-height: 1.1;
+            letter-spacing: -0.025em;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.25rem;
+            }
+        }
+
+        .hero-lead {
+            font-size: 1.125rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 1rem;
+            max-width: 540px;
+        }
+
+        .hero-sub {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2rem;
+            max-width: 540px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
             margin-bottom: 1rem;
         }
 
-        .code-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .code-dot.red { background: #ff5f57; }
-        .code-dot.yellow { background: #ffbd2e; }
-        .code-dot.green { background: #28ca42; }
-
-        .code-content {
-            font-family: 'JetBrains Mono', monospace;
+        .hero-note {
             font-size: 0.875rem;
-            line-height: 1.6;
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(255, 255, 255, 0.6);
         }
 
-        .code-comment {
-            color: rgba(255, 255, 255, 0.5);
+        /* Hero Cards */
+        .hero-cards {
+            position: relative;
         }
 
-        .code-keyword {
-            color: #7850ff;
+        .hero-cards::before {
+            content: '';
+            position: absolute;
+            top: -2.5rem;
+            right: -2rem;
+            width: 12rem;
+            height: 12rem;
+            background: rgba(234, 88, 12, 0.3);
+            border-radius: 9999px;
+            filter: blur(3rem);
         }
 
-        .code-string {
-            color: #50ff78;
+        .hero-cards::after {
+            content: '';
+            position: absolute;
+            bottom: -3rem;
+            left: -2.5rem;
+            width: 10rem;
+            height: 10rem;
+            background: rgba(234, 88, 12, 0.2);
+            border-radius: 9999px;
+            filter: blur(3rem);
+        }
+
+        .hero-card-stack {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 1.5rem;
+        }
+
+        .hero-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            color: white;
+        }
+
+        .hero-card-label {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 0.25rem;
+        }
+
+        .hero-card-text {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        /* Integrations Bar */
+        .integrations {
+            background: var(--slate-900);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2.5rem 0;
+        }
+
+        .integrations-label {
+            text-align: center;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--slate-400);
+            margin-bottom: 1.5rem;
+        }
+
+        .integrations-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            opacity: 0.6;
+        }
+
+        .integrations-logos span {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: white;
+        }
+
+        /* Main Content */
+        main {
+            background: var(--slate-50);
+            color: var(--slate-900);
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 4rem 0;
+        }
+
+        .problem-section h2 {
+            font-size: 1.875rem;
+            font-weight: 600;
+            letter-spacing: -0.025em;
+            color: var(--orange-900);
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-section p {
+            font-size: 1.125rem;
+            color: var(--slate-700);
+            margin-bottom: 1rem;
+            max-width: 48rem;
+        }
+
+        .check-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .check-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .check-icon {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 1.5rem;
+            background: var(--orange-100);
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 0.125rem;
+        }
+
+        .check-icon svg {
+            width: 1rem;
+            height: 1rem;
+            color: var(--orange-800);
+        }
+
+        .check-item span {
+            color: var(--slate-700);
         }
 
         /* Features Section */
         .features-section {
-            padding: 100px 0;
-            background: rgba(255, 255, 255, 0.02);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0 0 4rem;
         }
 
-        .section-title {
-            font-size: 3rem;
+        .features-header {
+            margin-bottom: 2rem;
+        }
+
+        .features-header h2 {
+            font-size: 1.875rem;
             font-weight: 600;
-            text-align: center;
-            margin: 0 0 3rem 0;
-            font-family: 'Space Grotesk', sans-serif;
-            letter-spacing: -0.02em;
-            color: rgba(255, 255, 255, 0.9);
+            letter-spacing: -0.025em;
+            color: var(--orange-900);
+            margin-bottom: 0.75rem;
+        }
+
+        .features-header p {
+            font-size: 1.125rem;
+            color: var(--slate-700);
         }
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .feature-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 2rem;
-            transition: all 0.3s;
+            background: white;
+            border: 1px solid var(--slate-200);
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
         }
 
-        .feature-card:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(120, 80, 255, 0.5);
-            transform: translateY(-4px);
-        }
-
-        .feature-icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            display: inline-block;
-            background: linear-gradient(135deg, #7850ff, #ff5078);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .feature-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin: 0 0 1rem 0;
-            font-family: 'Space Grotesk', sans-serif;
-        }
-
-        .feature-description {
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.8;
-        }
-
-        /* Demo Section */
-        .demo-section {
-            padding: 100px 0;
-        }
-        
-        /* Demo Tabs */
-        .demo-tabs {
+        .feature-card-header {
             display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
         }
-        
-        .demo-tab {
-            padding: 0.75rem 1.5rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s;
+
+        .feature-dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            background: var(--orange-700);
+            border-radius: 9999px;
+        }
+
+        .feature-card-header h3 {
             font-size: 0.875rem;
-            font-weight: 500;
-        }
-        
-        .demo-tab:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(120, 80, 255, 0.3);
-        }
-        
-        .demo-tab.active {
-            background: rgba(120, 80, 255, 0.2);
-            border-color: #7850ff;
-            color: #ffffff;
-        }
-        
-        .demo-content {
-            display: none;
-        }
-        
-        .demo-content.active {
-            display: block;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--orange-800);
         }
 
-        .demo-container {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 3rem;
-            margin: 0 auto;
-            max-width: 1200px;
+        .feature-card p {
+            color: var(--slate-800);
         }
 
-        .demo-grid {
+        /* Code Section */
+        .code-section {
+            padding: 0 0 4rem;
+        }
+
+        .code-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: start;
+            gap: 1.5rem;
         }
 
-        .demo-input {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 2rem;
+        @media (max-width: 1024px) {
+            .code-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
-        .demo-label {
+        .code-card {
+            background: white;
+            border: 1px solid var(--slate-200);
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .code-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: 1.5rem;
+            padding-bottom: 0.75rem;
+        }
+
+        .code-card > p {
+            padding: 0 1.5rem 1rem;
+            font-size: 1.125rem;
+            color: var(--slate-700);
+        }
+
+        .code-block {
+            background: var(--slate-900);
+            padding: 1.25rem;
             font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8125rem;
+            line-height: 1.6;
+            color: white;
+            overflow-x: auto;
+        }
+
+        .code-block .key { color: #7dd3fc; }
+        .code-block .string { color: #86efac; }
+        .code-block .comment { color: #64748b; }
+
+        /* How It Works */
+        .how-section {
+            padding: 0 0 4rem;
+        }
+
+        .how-section h2 {
+            font-size: 1.875rem;
+            font-weight: 600;
+            letter-spacing: -0.025em;
+            color: var(--orange-900);
+            margin-bottom: 0.75rem;
+        }
+
+        .how-section > .container > p {
+            font-size: 1.125rem;
+            color: var(--slate-700);
+            margin-bottom: 2rem;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .steps-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .step-card {
+            background: var(--slate-100);
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+
+        .step-card h3 {
+            font-weight: 600;
+            color: var(--slate-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .step-card p {
             font-size: 0.875rem;
-            color: rgba(255, 255, 255, 0.5);
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        .demo-text {
-            font-family: 'JetBrains Mono', monospace;
-            color: #50ff78;
-            line-height: 1.8;
-        }
-
-        pre {
-            margin: 0;
-            background: transparent !important;
-            padding: 0 !important;
-        }
-
-        pre code {
-            background: transparent !important;
-            font-family: 'JetBrains Mono', monospace !important;
-            font-size: 0.875rem !important;
-        }
-
-        /* Registry Section */
-        .registry-section {
-            background: linear-gradient(135deg, rgba(123, 63, 242, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 80px 0;
-            margin: 80px 0;
-            position: relative;
-        }
-
-        .registry-content {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .registry-badge {
-            display: inline-block;
-            background: rgba(123, 63, 242, 0.2);
-            border: 1px solid rgba(123, 63, 242, 0.4);
-            color: #A78BFA;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            margin-bottom: 24px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .registry-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 24px;
-            background: linear-gradient(135deg, #ffffff 0%, #9ca3af 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .registry-description {
-            font-size: 1.25rem;
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.8;
-            margin-bottom: 32px;
+            color: var(--slate-600);
         }
 
         /* CTA Section */
         .cta-section {
-            padding: 100px 0;
+            padding: 4rem 0 5rem;
             text-align: center;
-            background: rgba(120, 50, 255, 0.05);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .cta-section h2 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin: 0 0 1rem 0;
-            font-family: 'Space Grotesk', sans-serif;
-            letter-spacing: -0.02em;
-            color: #ffffff;
+            font-size: 1.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
         }
 
         .cta-section p {
-            font-size: 1.25rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin: 0 0 3rem 0;
+            font-size: 1.125rem;
+            color: var(--slate-700);
+            margin-bottom: 0.5rem;
+            max-width: 48rem;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .cta-buttons {
             display: flex;
-            gap: 1.5rem;
             justify-content: center;
-        }
-        
-        /* Waitlist Form */
-        .waitlist-form {
-            max-width: 600px;
-            margin: 0 auto;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 3rem;
-        }
-        
-        .waitlist-form h3 {
-            font-size: 2rem;
-            font-weight: 600;
-            margin: 0 0 1rem 0;
-            font-family: 'Space Grotesk', sans-serif;
-            color: #ffffff;
-        }
-        
-        .waitlist-subtitle {
-            color: rgba(255, 255, 255, 0.7);
-            margin: 0 0 2rem 0;
-            font-size: 1.125rem;
-        }
-        
-        .signup-form {
-            margin: 2rem 0;
-        }
-        
-        .form-group {
-            display: flex;
             gap: 1rem;
-            margin-bottom: 1rem;
-            flex-direction: column;
-        }
-        
-        .form-group input[type="email"],
-        .form-group input[type="text"],
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 1rem 1.5rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            color: #ffffff;
-            font-size: 1rem;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.3s;
-        }
-        
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-        
-        .form-group select {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='rgba(255,255,255,0.5)' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 1.5rem center;
-            padding-right: 3rem;
-        }
-        
-        .form-group select option {
-            background: #000000;
-            color: #ffffff;
-        }
-        
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-        
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: rgba(120, 80, 255, 0.5);
-            background: rgba(255, 255, 255, 0.08);
-        }
-        
-        .form-message {
-            text-align: center;
-            margin-top: 1rem;
-            font-size: 0.875rem;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .form-message.success {
-            color: #50ff78;
-            opacity: 1;
-        }
-        
-        .form-message.error {
-            color: #ff5078;
-            opacity: 1;
-        }
-        
-        .waitlist-info {
-            margin-top: 3rem;
-            text-align: left;
-        }
-        
-        .waitlist-info ul {
-            list-style: none;
-            padding: 0;
-            margin: 1rem 0 2rem 0;
-        }
-        
-        .waitlist-info li {
-            padding: 0.5rem 0;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.95rem;
-        }
-        
-        .early-access-note {
-            background: rgba(120, 80, 255, 0.1);
-            border: 1px solid rgba(120, 80, 255, 0.2);
-            border-radius: 12px;
-            padding: 1rem;
-            margin-top: 2rem;
-            font-size: 0.875rem;
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        /* Success Modal */
-        .modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            z-index: 2000;
-        }
-
-        .modal.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .modal-content {
-            position: relative;
-            width: 100%;
-            max-width: 520px;
-            background: rgba(10, 10, 10, 0.95);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 2.5rem;
-            box-shadow: 0 0 80px rgba(0, 0, 0, 0.6);
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: none;
-            background: rgba(255, 255, 255, 0.08);
-            color: #fff;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }
-
-        .modal-close:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .ai-response {
+            flex-wrap: wrap;
             margin-top: 1.5rem;
-            padding: 1.25rem 1.5rem;
-            border-radius: 16px;
-            background: rgba(120, 80, 255, 0.08);
-            border: 1px solid rgba(120, 80, 255, 0.3);
-        }
-
-        .ai-response h3 {
-            margin: 0 0 0.75rem 0;
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .ai-response p {
-            margin: 0;
-            font-size: 1rem;
-            line-height: 1.7;
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .loading-dots {
-            display: inline-flex;
-            gap: 0.35rem;
-        }
-
-        .loading-dots span {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.7);
-            animation: bounce 1s infinite;
-        }
-
-        .loading-dots span:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .loading-dots span:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes bounce {
-            0%, 80%, 100% { transform: scale(0); opacity: 0.4; }
-            40% { transform: scale(1); opacity: 1; }
         }
 
         /* Footer */
-        .main-footer {
-            padding: 40px 0;
-            text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        footer {
+            background: var(--slate-950);
+            color: var(--slate-300);
+            padding: 2.5rem 0;
         }
 
-        .main-footer p {
-            color: rgba(255, 255, 255, 0.5);
+        .footer-inner {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .footer-inner {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        .footer-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .footer-tagline {
+            color: var(--slate-400);
+            max-width: 24rem;
+            margin-top: 0.5rem;
+        }
+
+        .footer-copy {
+            font-size: 0.875rem;
+            color: var(--slate-500);
+            margin-top: 0.75rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--slate-400);
+            text-decoration: none;
             font-size: 0.875rem;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 20px;
-            }
-            
-            .hero-content {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-            
-            .hero-text {
-                text-align: center;
-            }
-            
-            .hero-title {
-                font-size: 3rem;
-            }
-            
-            .hero-section {
-                padding: 80px 0 60px;
-            }
-            
-            .nav-links {
-                gap: 1.5rem;
-            }
-            
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .demo-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .hero-buttons,
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-                width: 100%;
-            }
-            
-            .btn {
-                width: 100%;
-                text-align: center;
-                justify-content: center;
-            }
-            
-            .waitlist-form {
-                margin: 0 20px;
-                padding: 2rem;
-            }
-            
-            .form-group input[type="email"],
-            .form-group input[type="text"],
-            .form-group select,
-            .form-group textarea {
-                width: 100%;
-            }
+        .footer-links a:hover {
+            color: white;
         }
     </style>
-    <!-- VoiceForge Target Graph Tracking -->
-    <script src="/voiceforge-tracking.js"></script>
 </head>
 <body>
-    <div class="page-wrapper">
-        <!-- Navigation -->
-        <nav class="main-nav">
+    <header>
+        <nav class="nav">
             <div class="container">
-                <div class="nav-wrapper">
-                    <a href="/" class="nav-brand">protobuf.ai</a>
-                    <div class="nav-links">
-                        <a href="#features">Features</a>
-                    </div>
+                <div class="nav-inner">
+                    <a href="/" class="nav-brand">
+                        <span class="nav-brand-text">protobuf.ai</span>
+                    </a>
+                    <ul class="nav-links">
+                        <li><a href="/registry.html">Registry</a></li>
+                        <li><a href="/blog/">Blog</a></li>
+                        <li><a href="https://github.com/protobuf-ai/protobuf-ai">GitHub</a></li>
+                        <li><a href="#get-started" class="btn btn-primary">Get Started</a></li>
+                    </ul>
                 </div>
             </div>
         </nav>
 
-        <!-- Hero Section -->
-        <section class="hero-section">
+        <section class="hero">
             <div class="container">
-                <div class="hero-content">
-                    <div class="hero-text">
-                        <h1 class="hero-title">AI-Powered<br>Protocol Buffers</h1>
-                        <p class="hero-subtitle">
-                            Generate valid Protocol Buffer schemas from natural language descriptions. 
-                            AI-powered development that actually works today.
-                        </p>
-                        <div class="hero-buttons">
-                            <a href="#waitlist-form" class="btn btn-primary">Join Waitlist</a>
-                            <a href="#features" class="btn btn-secondary">See What We're Building</a>
+                <div class="hero-grid">
+                    <div class="hero-content">
+                        <div class="hero-badge">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path></svg>
+                            <span>The semantic layer for Protocol Buffers</span>
                         </div>
+                        <h1>Protocol Buffers for the AI Era</h1>
+                        <p class="hero-lead">AI agents can read your schemas. They just can't understand them.</p>
+                        <p class="hero-sub"><strong>context.json</strong> adds the semantic layer that makes your APIs AI-native. Structure got us here. Meaning gets us where we're going.</p>
+                        <div class="hero-cta">
+                            <a href="#get-started" class="btn btn-primary">Get Started <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
+                            <a href="/blog/schemas-need-meaning.html" class="btn btn-ghost">Read the Manifesto</a>
+                        </div>
+                        <p class="hero-note">Open source. MIT licensed.</p>
                     </div>
-                    <div class="hero-code">
-                        <div class="code-header">
-                            <span class="code-dot red"></span>
-                            <span class="code-dot yellow"></span>
-                            <span class="code-dot green"></span>
-                        </div>
-                        <div class="code-content">
-                            <span class="code-comment">// AI prevents breaking changes before deploy</span><br>
-                            <span class="code-string">$ protobuf-ai check user.proto --against v1.0.0</span><br><br>
-                            
-                            <span class="code-comment">🚨 Breaking Change Detected:</span><br>
-                            <span style="color: #ff5078;">✗ Field 'email' removed from message 'User'</span><br>
-                            <span style="color: #50ff78;">✓ Suggestion: Deprecate field instead:</span><br>
-                            &nbsp;&nbsp;<span class="code-keyword">string</span> email = 3 [<span class="code-keyword">deprecated</span> = <span class="code-keyword">true</span>];<br>
-                            &nbsp;&nbsp;<span class="code-comment">// Use 'primary_email' field instead</span>
+                    <div class="hero-cards">
+                        <div class="hero-card-stack">
+                            <div class="hero-card">
+                                <div class="hero-card-label">What AI sees</div>
+                                <div class="hero-card-text">int64 amount, string currency, string status</div>
+                            </div>
+                            <div class="hero-card">
+                                <div class="hero-card-label">What AI needs</div>
+                                <div class="hero-card-text">Amount in cents, ISO 4217 currency, state machine with transitions</div>
+                            </div>
+                            <div class="hero-card">
+                                <div class="hero-card-label">What context.json provides</div>
+                                <div class="hero-card-text">Semantic meaning, ontology mapping, edge cases, relationships</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+    </header>
 
-        <!-- Features Section -->
-        <section class="features-section" id="features">
+    <section class="integrations">
+        <div class="container">
+            <p class="integrations-label">Works with your existing protobuf tools</p>
+            <div class="integrations-logos">
+                <span>Buf</span>
+                <span>gRPC</span>
+                <span>Connect</span>
+                <span>protoc</span>
+                <span>Schema Registry</span>
+            </div>
+        </div>
+    </section>
+
+    <main>
+        <section class="problem-section">
             <div class="container">
-                <h2 class="section-title">AI-First Protocol Buffers, Today</h2>
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <span class="feature-icon">⚡</span>
-                        <h3 class="feature-title">Natural Language to Proto</h3>
-                        <p class="feature-description">
-                            <strong>Available Now:</strong> Describe your API in plain English and get valid proto3 schemas instantly. Real AST-based generation, not templates.
-                        </p>
+                <h2>Stop AI from guessing your schema semantics</h2>
+                <p>When AI agents integrate with your API, they see field names and types. They don't know that <code>amount</code> is in cents, that <code>status</code> follows a state machine, or that refunds use negative values.</p>
+                <p>context.json gives every AI tool a single, always-current source of truth for what your schema actually means—so integrations work correctly without reverse-engineering your documentation.</p>
+                <div class="check-list">
+                    <div class="check-item">
+                        <div class="check-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></div>
+                        <span>AI-generated integrations work correctly by default—no trial and error.</span>
                     </div>
-                    <div class="feature-card">
-                        <span class="feature-icon">🔍</span>
-                        <h3 class="feature-title">Smart Schema Analysis</h3>
-                        <p class="feature-description">
-                            <strong>Available Now:</strong> Parse and validate any protobuf schema. Detect field conflicts, suggest optimizations, and ensure best practices.
-                        </p>
+                    <div class="check-item">
+                        <div class="check-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></div>
+                        <span>Update semantic context once—every AI agent picks it up instantly.</span>
                     </div>
-                    <div class="feature-card">
-                        <span class="feature-icon">🔄</span>
-                        <h3 class="feature-title">Platform Awareness</h3>
-                        <p class="feature-description">
-                            Basic conversion between protobuf formats. Full platform migration tools for seamless transitions.
-                        </p>
+                    <div class="check-item">
+                        <div class="check-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></div>
+                        <span>Ontology mapping validates that fields match their intended meaning.</span>
                     </div>
-                    <div class="feature-card">
-                        <span class="feature-icon">🛡️</span>
-                        <h3 class="feature-title">Breaking Change Detection</h3>
-                        <p class="feature-description">
-                            AI identifies breaking changes before you deploy. Suggests safe evolution paths for your schemas.
-                        </p>
-                    </div>
-                    <div class="feature-card">
-                        <span class="feature-icon">🚀</span>
-                        <h3 class="feature-title">5-10x Faster Today</h3>
-                        <p class="feature-description">
-                            <strong>Proven:</strong> Generate complete service definitions in seconds. No more syntax errors. No more manual field numbering.
-                        </p>
-                    </div>
-                    <div class="feature-card">
-                        <span class="feature-icon">📈</span>
-                        <h3 class="feature-title">Growing Smarter</h3>
-                        <p class="feature-description">
-                            Pattern learning, multi-language codegen, and API evolution tools. Join us in building the future.
-                        </p>
+                    <div class="check-item">
+                        <div class="check-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></div>
+                        <span>Works alongside your existing Buf, protoc, and gRPC tooling.</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Benefits Section -->
-        <section class="features-section" style="background: transparent; border: none;">
-            <div class="container">
-                <h2 class="section-title">What's Different Today</h2>
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <span class="feature-icon">😩</span>
-                        <h3 class="feature-title">Traditional: Manual & Error-Prone</h3>
-                        <p class="feature-description">
-                            Write proto by hand → Google syntax → Fix field numbers → Run linters → Fix errors → Hope it works. Average time: 20-30 minutes per service.
-                        </p>
-                    </div>
-                    <div class="feature-card">
-                        <span class="feature-icon">🚀</span>
-                        <h3 class="feature-title">With AI: Natural & Fast</h3>
-                        <p class="feature-description">
-                            Describe your API → Get valid schema → AI validates & optimizes → Export to your tools. Real time saved: 15-25 minutes per service.
-                        </p>
-                    </div>
-                    <div class="feature-card">
-                        <span class="feature-icon">💰</span>
-                        <h3 class="feature-title">Real Impact</h3>
-                        <p class="feature-description">
-                            Users report 70% faster protobuf development. Fewer bugs. Better schemas. AI handles the syntax, you focus on the API design.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Personas Section -->
         <section class="features-section">
             <div class="container">
-                <h2 class="section-title">Built For Developers</h2>
+                <div class="features-header">
+                    <h2>One file. Complete semantic context.</h2>
+                    <p>Everything AI agents need to understand your API—organized, versioned, and always up to date.</p>
+                </div>
                 <div class="features-grid">
                     <div class="feature-card">
-                        <span class="feature-icon">🏃</span>
-                        <h3 class="feature-title">Rapid Prototyping</h3>
-                        <p class="feature-description">
-                            Perfect for hackathons and MVPs. Go from idea to working protobuf schema in minutes. No more boilerplate slowing you down.
-                        </p>
+                        <div class="feature-card-header">
+                            <div class="feature-dot"></div>
+                            <h3>AI Discovery</h3>
+                        </div>
+                        <p>When developers ask "what should I use for payments?", AI agents find your API through semantic search—not keyword matching.</p>
                     </div>
                     <div class="feature-card">
-                        <span class="feature-icon">🏢</span>
-                        <h3 class="feature-title">Growing Teams</h3>
-                        <p class="feature-description">
-                            Maintain consistency across services. AI learns your patterns and helps new team members follow your conventions automatically.
-                        </p>
+                        <div class="feature-card-header">
+                            <div class="feature-dot"></div>
+                            <h3>Correct Implementation</h3>
+                        </div>
+                        <p>AI understands that amount is in cents, currency is ISO 4217, and refunds use negative values. First integration works.</p>
                     </div>
                     <div class="feature-card">
-                        <span class="feature-icon">👩‍💻</span>
-                        <h3 class="feature-title">API-First Teams</h3>
-                        <p class="feature-description">
-                            Design better APIs faster. Focus on what your API does, not protobuf syntax. Perfect for schema-first development.
-                        </p>
+                        <div class="feature-card-header">
+                            <div class="feature-dot"></div>
+                            <h3>Ontology Validation</h3>
+                        </div>
+                        <p>Map fields to schema.org or custom ontologies. Catch semantic mismatches before they become production bugs.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-card-header">
+                            <div class="feature-dot"></div>
+                            <h3>Cross-Schema Compatibility</h3>
+                        </div>
+                        <p>Two APIs with different field names but the same meaning? context.json knows they're compatible.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Demo Section with Tabs -->
-        <section class="demo-section" id="demos">
+        <section class="code-section">
             <div class="container">
-                <h2 class="section-title">See AI in Action</h2>
-                
-                <div class="demo-tabs">
-                    <div class="demo-tab active" onclick="showDemo('breaking-changes')">Breaking Changes</div>
-                    <div class="demo-tab" onclick="showDemo('smart-generation')">Smart Generation</div>
-                    <div class="demo-tab" onclick="showDemo('semantic-search')">Semantic Search</div>
-                </div>
-                
-                <div class="demo-container">
-                    <!-- Breaking Changes Demo -->
-                    <div id="breaking-changes" class="demo-content active">
-                        <div class="demo-grid">
-                            <div class="demo-input">
-                                <span class="demo-label">// YOUR CHANGE</span>
-                                <pre><code class="language-protobuf">message User {
-  string id = 1;
-  string username = 2;
-  // Removed: string email = 3;
-  string primary_email = 4; // New field
-  repeated string roles = 5;
-}</code></pre>
-                            </div>
-                            <div class="demo-input">
-                                <span class="demo-label">// AI ANALYSIS</span>
-                                <div class="demo-text" style="font-family: 'JetBrains Mono', monospace;">
-                                    <span style="color: #ff5078;">🚨 Breaking Change Detected</span><br><br>
-                                    <span style="color: rgba(255,255,255,0.7)">Field 'email' (tag 3) was removed</span><br>
-                                    <span style="color: rgba(255,255,255,0.7)">This breaks wire compatibility!</span><br><br>
-                                    <span style="color: #50ff78;">✅ Suggested Fix:</span><br>
-                                    <span style="color: rgba(255,255,255,0.9)">string email = 3 [deprecated = true];</span><br>
-                                    <span style="color: rgba(255,255,255,0.7)">// Clients should use primary_email</span><br><br>
-                                    <span style="color: #7850ff;">📝 Migration Path:</span><br>
-                                    <span style="color: rgba(255,255,255,0.7)">1. Deprecate old field</span><br>
-                                    <span style="color: rgba(255,255,255,0.7)">2. Add migration guide</span><br>
-                                    <span style="color: rgba(255,255,255,0.7)">3. Remove after 6 months</span>
-                                </div>
-                            </div>
-                        </div>
+                <div class="code-grid">
+                    <div class="code-card">
+                        <h3>Strategy-as-Code</h3>
+                        <p>Your schema semantics, version-controlled and API-accessible.</p>
+                        <div class="code-block"><span class="comment">// payment.context.json</span>
+{
+  <span class="key">"@context"</span>: <span class="string">"https://protobuf.ai/ontology/v1"</span>,
+  <span class="key">"schema"</span>: <span class="string">"payment.proto"</span>,
+  <span class="key">"domain"</span>: <span class="string">"payments"</span>,
+  <span class="key">"messages"</span>: {
+    <span class="key">"Payment"</span>: {
+      <span class="key">"semanticType"</span>: <span class="string">"schema:PayAction"</span>,
+      <span class="key">"fields"</span>: {
+        <span class="key">"amount"</span>: {
+          <span class="key">"maps_to"</span>: <span class="string">"schema:price"</span>,
+          <span class="key">"unit"</span>: <span class="string">"cents"</span>
+        }
+      }
+    }
+  }
+}</div>
                     </div>
-                    
-                    <!-- Smart Generation Demo -->
-                    <div id="smart-generation" class="demo-content">
-                        <div class="demo-grid">
-                            <div class="demo-input">
-                                <span class="demo-label">// JUST DESCRIBE WHAT YOU NEED</span>
-                                <div class="demo-text" style="font-family: 'JetBrains Mono', monospace; color: #50ff78;">
-                                    "Create a user service with authentication"<br>
-                                </div>
-                            </div>
-                            <div class="demo-input">
-                                <span class="demo-label">// AI GENERATES PERFECT PROTO</span>
-                                <pre><code class="language-protobuf">syntax = "proto3";
-
-service UserService {
-  rpc Login(LoginRequest) returns (LoginResponse);
-  rpc Register(RegisterRequest) returns (User);
-}
-
-message LoginRequest {
-  string email = 1;
-  string password = 2;
-}
-
-message LoginResponse {
-  string token = 1;
-  User user = 2;
-  int64 expires_at = 3;
-}
-
-message RegisterRequest {
-  string email = 1;
-  string password = 2;
-  string username = 3;
-}
-
-message User {
-  string id = 1;
-  string email = 2;
-  string username = 3;
-  int64 created_at = 4;
-}</code></pre>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Semantic Search Demo -->
-                    <div id="semantic-search" class="demo-content">
-                        <div class="demo-grid">
-                            <div class="demo-input">
-                                <span class="demo-label">// YOUR SEARCH</span>
-                                <div class="demo-text" style="font-family: 'JetBrains Mono', monospace; color: #50ff78;">
-                                    "How do we handle user authentication?"<br><br>
-                                    <span style="color: rgba(255,255,255,0.5)">Traditional search: 0 results ❌</span><br>
-                                    <span style="color: rgba(255,255,255,0.5)">(no files contain "authentication")</span>
-                                </div>
-                            </div>
-                            <div class="demo-input">
-                                <span class="demo-label">// AI FINDS SEMANTICALLY</span>
-                                <div class="demo-text" style="font-family: 'JetBrains Mono', monospace;">
-                                    <span style="color: #7850ff;">Found 3 relevant schemas:</span><br><br>
-                                    <span style="color: #50ff78;">✓ auth/session.proto</span><br>
-                                    <span style="color: rgba(255,255,255,0.7)">SessionService handles login flow</span><br><br>
-                                    <span style="color: #50ff78;">✓ identity/user.proto</span><br>
-                                    <span style="color: rgba(255,255,255,0.7)">User credentials and verification</span><br><br>
-                                    <span style="color: #50ff78;">✓ security/token.proto</span><br>
-                                    <span style="color: rgba(255,255,255,0.7)">JWT token generation service</span><br><br>
-                                    <span style="color: rgba(255,255,255,0.5)">AI understands "authentication" relates<br>to sessions, identity, and tokens</span>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="code-card">
+                        <h3>Edge Cases Captured</h3>
+                        <p>Domain knowledge that lives with the schema, not in tribal knowledge.</p>
+                        <div class="code-block"><span class="comment">// payment.context.json</span>
+{
+  <span class="key">"edge_cases"</span>: [
+    <span class="string">"Refunds use negative amount"</span>,
+    <span class="string">"Multi-currency requires conversion at capture time"</span>,
+    <span class="string">"Status transitions: PENDING → COMPLETED | FAILED"</span>
+  ],
+  <span class="key">"validation"</span>: {
+    <span class="key">"amount"</span>: <span class="string">"Must be non-zero"</span>,
+    <span class="key">"currency"</span>: <span class="string">"ISO 4217 format required"</span>
+  }
+}</div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- CTA Section -->
-        <section class="cta-section">
+        <section class="how-section">
             <div class="container">
-
-                <div class="waitlist-form">
-                    <h3>Join the Waitlist</h3>
-                    <p class="waitlist-subtitle">Get notified when we launch.</p>
-                    
-                    <form id="waitlist-form" class="signup-form">
-                        <div class="form-group">
-                            <input type="email" id="email" name="email" placeholder="your@email.com" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" id="name" name="name" placeholder="Your name" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" id="company" name="company" placeholder="Company (optional)">
-                        </div>
-                        <div class="form-group">
-                            <select id="use-case" name="use-case" required>
-                                <option value="">How will you use protobuf.ai?</option>
-                                <option value="rapid-prototyping">Rapid Prototyping</option>
-                                <option value="team-development">Team Development</option>
-                                <option value="api-design">API-First Design</option>
-                                <option value="migration">Schema Migration</option>
-                                <option value="learning">Learning Protobuf</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <textarea id="message" name="message" placeholder="Tell us more about your use case (optional)" rows="3"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary waitlist-submit" style="width: 100%;">Join Waitlist</button>
-                        </div>
-                        <div class="form-message" id="form-message"></div>
-                    </form>
-                    
-                    <div class="waitlist-info">
-                        <p class="early-access-note">
-                            <em>Waitlist members will get free usage credits and direct input on features.</em>
-                        </p>
+                <h2>How it works</h2>
+                <p>From schema to AI-native API in four steps.</p>
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <h3>1. Generate</h3>
+                        <p>AI analyzes your .proto and creates context.json automatically</p>
+                    </div>
+                    <div class="step-card">
+                        <h3>2. Refine</h3>
+                        <p>Add domain knowledge, edge cases, and relationships</p>
+                    </div>
+                    <div class="step-card">
+                        <h3>3. Publish</h3>
+                        <p>Push to registry.protobuf.ai alongside your schema</p>
+                    </div>
+                    <div class="step-card">
+                        <h3>4. Discover</h3>
+                        <p>AI agents find and correctly understand your API</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Footer -->
-        <footer class="main-footer">
+        <section class="cta-section" id="get-started">
             <div class="container">
-                <p>&copy; 2025 protobuf.ai. All rights reserved.</p>
+                <h2>Make your APIs AI-native</h2>
+                <p>Stop letting AI guess your schema semantics. Give it the truth.</p>
+                <p>context.json turns your Protocol Buffers into a living system that every AI tool can read—so integrations stay accurate, consistent, and correct.</p>
+                <div class="cta-buttons">
+                    <a href="https://github.com/protobuf-ai/protobuf-ai" class="btn btn-primary">View on GitHub <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
+                    <a href="/registry.html" class="btn btn-outline">Explore the Registry</a>
+                </div>
             </div>
-        </footer>
+        </section>
+    </main>
 
-        <!-- Success Modal -->
-        <div id="successModal" class="modal">
-            <div class="modal-content">
-                <button class="modal-close" onclick="closeModal()">×</button>
-                <h2 style="font-size: 2rem; font-weight: 600; margin: 0 0 1rem 0; font-family: 'Space Grotesk', sans-serif;">
-                    You're on the waitlist!
-                </h2>
-                <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 1.5rem;">
-                    We'll reach out with early access and roadmap updates soon.
-                </p>
-                <div id="aiResponseContainer" class="ai-response" style="display: none;">
-                    <h3>AI Assistant Response</h3>
-                    <p id="aiResponseText">
-                        <span class="loading-dots">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </span>
-                    </p>
+    <footer>
+        <div class="container">
+            <div class="footer-inner">
+                <div>
+                    <div class="footer-brand">protobuf.ai</div>
+                    <p class="footer-tagline">The semantic layer for Protocol Buffers. Make your APIs AI-native.</p>
+                    <p class="footer-copy">&copy; 2026 protobuf.ai. Open source under MIT license.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/protobuf-ai/protobuf-ai">GitHub</a>
+                    <a href="/registry.html">Registry</a>
+                    <a href="/blog/">Blog</a>
                 </div>
             </div>
         </div>
-    </div>
-
-    <script>
-        const waitlistForm = document.getElementById('waitlist-form');
-        const formMessage = document.getElementById('form-message');
-        const successModal = document.getElementById('successModal');
-        const aiResponseContainer = document.getElementById('aiResponseContainer');
-        const aiResponseText = document.getElementById('aiResponseText');
-        const submitButton = waitlistForm.querySelector('button[type="submit"]');
-
-        waitlistForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const payload = {
-                email: document.getElementById('email').value,
-                name: document.getElementById('name').value,
-                company: document.getElementById('company').value || 'Not specified',
-                useCase: document.getElementById('use-case').value,
-                message: document.getElementById('message').value || 'No additional message',
-                timestamp: new Date().toISOString()
-            };
-
-            formMessage.className = 'form-message';
-            formMessage.textContent = '';
-
-            submitButton.disabled = true;
-            submitButton.textContent = 'Joining...';
-
-            try {
-                const response = await fetch('/api/waitlist', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(payload)
-                });
-
-                const result = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(result.error || 'Failed to submit');
-                }
-
-                waitlistForm.reset();
-                aiResponseContainer.style.display = 'none';
-                aiResponseText.innerHTML = '<span class="loading-dots"><span></span><span></span><span></span></span>';
-                successModal.classList.add('active');
-
-                const aiText = result.aiResponse || 'Thanks for joining the protobuf.ai waitlist! We will follow up shortly.';
-
-                setTimeout(() => {
-                    aiResponseContainer.style.display = 'block';
-                    typeWriter(aiText, aiResponseText);
-                }, 400);
-
-            } catch (error) {
-                formMessage.textContent = error.message || 'Sorry, there was an error submitting your request.';
-                formMessage.className = 'form-message error';
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = 'Join Waitlist';
-            }
-        });
-
-        function typeWriter(text, target) {
-            target.textContent = '';
-            let index = 0;
-
-            function write() {
-                if (index < text.length) {
-                    target.textContent += text.charAt(index);
-                    index += 1;
-                    setTimeout(write, 20);
-                }
-            }
-
-            write();
-        }
-
-        window.closeModal = function() {
-            successModal.classList.remove('active');
-        }
-
-        successModal.addEventListener('click', (event) => {
-            if (event.target === successModal) {
-                closeModal();
-            }
-        });
-
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape' && successModal.classList.contains('active')) {
-                closeModal();
-            }
-        });
-
-        // Demo tab switching
-        function showDemo(demoId) {
-            document.querySelectorAll('.demo-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            event.target.classList.add('active');
-
-            document.querySelectorAll('.demo-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            document.getElementById(demoId).classList.add('active');
-        }
-
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-    </script>
+    </footer>
 </body>
 </html>
