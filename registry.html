@@ -15,68 +15,57 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@protobufai">
 
-    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --slate-50: #f8fafc;
-            --slate-100: #f1f5f9;
-            --slate-200: #e2e8f0;
-            --slate-300: #cbd5e1;
-            --slate-400: #94a3b8;
-            --slate-500: #64748b;
-            --slate-600: #475569;
-            --slate-700: #334155;
-            --slate-800: #1e293b;
-            --slate-900: #0f172a;
-            --slate-950: #020617;
-            --orange-50: #fff7ed;
-            --orange-100: #ffedd5;
-            --orange-600: #ea580c;
-            --orange-700: #c2410c;
-            --orange-800: #9a3412;
-            --orange-900: #7c2d12;
-            --green-500: #22c55e;
+            --background: #f8fafc;
+            --foreground: #0f172a;
+            --primary: #b45309;
+            --primary-light: #d97706;
+            --primary-dark: #92400e;
+            --muted: #64748b;
+            --muted-light: #94a3b8;
+            --border: #e2e8f0;
+            --card: #ffffff;
+            --green: #22c55e;
         }
 
         body {
-            font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
-            line-height: 1.6;
-            color: var(--slate-900);
-            background: var(--slate-950);
+            font-family: 'Source Serif 4', ui-serif, Georgia, 'Times New Roman', serif;
+            line-height: 1.7;
+            color: var(--foreground);
+            background: var(--background);
             -webkit-font-smoothing: antialiased;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 720px;
             margin: 0 auto;
-            padding: 0 1rem;
+            padding: 0 1.5rem;
         }
 
-        /* Header */
-        header {
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(to bottom right, var(--slate-950), var(--slate-900), var(--slate-950));
+        .container-wide {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
         }
 
-        header::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            opacity: 0.3;
-            background:
-                radial-gradient(circle at top right, rgba(92, 240, 217, 0.15), transparent 35%),
-                radial-gradient(circle at 20% 30%, rgba(247, 181, 0, 0.12), transparent 30%);
-            pointer-events: none;
+        a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
         }
 
         /* Nav */
-        .nav {
-            position: relative;
+        nav {
             padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border);
         }
 
         .nav-inner {
@@ -86,88 +75,33 @@
         }
 
         .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            text-decoration: none;
-        }
-
-        .nav-brand-text {
             font-size: 1.25rem;
-            font-weight: 600;
-            color: white;
-            letter-spacing: -0.025em;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
         }
 
         .nav-links {
             display: flex;
-            gap: 1.5rem;
-            align-items: center;
+            gap: 2rem;
             list-style: none;
         }
 
         .nav-links a {
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            font-size: 0.875rem;
-            font-weight: 500;
-            transition: color 0.2s;
+            color: var(--muted);
+            font-size: 0.9375rem;
         }
 
         .nav-links a:hover {
-            color: white;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 0.625rem 1.25rem;
-            border-radius: 0.375rem;
-            font-size: 0.875rem;
-            font-weight: 500;
+            color: var(--foreground);
             text-decoration: none;
-            transition: all 0.2s;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-primary {
-            background: var(--orange-700);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--orange-600);
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: var(--orange-800);
-            border: 1px solid var(--orange-700);
-        }
-
-        .btn-outline:hover {
-            background: var(--orange-50);
-        }
-
-        .btn-ghost {
-            background: transparent;
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-ghost:hover {
-            background: rgba(255, 255, 255, 0.1);
         }
 
         /* Hero */
         .hero {
-            position: relative;
-            padding: 3rem 0 4rem;
+            padding: 4rem 0 3rem;
             text-align: center;
-            color: white;
+            border-bottom: 1px solid var(--border);
         }
 
         .hero-badge {
@@ -175,32 +109,25 @@
             align-items: center;
             gap: 0.5rem;
             padding: 0.375rem 0.75rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--border);
             border-radius: 9999px;
             font-size: 0.875rem;
+            color: var(--muted);
             margin-bottom: 1.5rem;
         }
 
         .hero h1 {
-            font-family: 'Source Serif 4', ui-serif, Georgia, serif;
-            font-size: 3rem;
-            font-weight: 600;
-            line-height: 1.1;
-            letter-spacing: -0.025em;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1.2;
             margin-bottom: 1.5rem;
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.25rem;
-            }
         }
 
         .hero-lead {
             font-size: 1.25rem;
-            color: rgba(255, 255, 255, 0.85);
-            margin-bottom: 2.5rem;
+            color: var(--foreground);
+            margin-bottom: 2rem;
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
@@ -209,8 +136,8 @@
         .hero-stats {
             display: flex;
             justify-content: center;
-            gap: 4rem;
-            margin-bottom: 2.5rem;
+            gap: 3rem;
+            margin-bottom: 2rem;
             flex-wrap: wrap;
         }
 
@@ -219,63 +146,83 @@
         }
 
         .hero-stat-value {
-            font-size: 1.25rem;
+            font-size: 1.125rem;
             font-weight: 700;
-            color: var(--orange-600);
+            color: var(--primary);
             display: block;
         }
 
         .hero-stat-label {
             font-size: 0.875rem;
-            color: rgba(255, 255, 255, 0.6);
+            color: var(--muted);
         }
 
         .hero-cta {
             display: flex;
-            gap: 0.75rem;
+            gap: 1rem;
             justify-content: center;
             flex-wrap: wrap;
         }
 
-        /* Main */
-        main {
-            background: var(--slate-50);
-            color: var(--slate-900);
-        }
-
-        /* Features Section */
-        .features-section {
-            padding: 4rem 0;
-        }
-
-        .features-header {
-            margin-bottom: 2rem;
-        }
-
-        .features-header h2 {
-            font-family: 'Source Serif 4', ui-serif, Georgia, serif;
-            font-size: 1.875rem;
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            font-family: inherit;
+            font-size: 1rem;
             font-weight: 600;
-            letter-spacing: -0.025em;
-            color: var(--orange-900);
-            margin-bottom: 0.75rem;
+            text-decoration: none;
+            transition: all 0.15s;
+            border: none;
+            cursor: pointer;
         }
 
-        .features-header p {
-            font-size: 1.125rem;
-            color: var(--slate-700);
+        .btn-primary {
+            background: var(--primary);
+            color: white;
         }
 
+        .btn-primary:hover {
+            background: var(--primary-light);
+            text-decoration: none;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 1.5px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Sections */
+        section {
+            padding: 3rem 0;
+        }
+
+        section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        section p {
+            margin-bottom: 1rem;
+        }
+
+        /* Features Grid */
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 1.5rem;
-        }
-
-        @media (max-width: 1024px) {
-            .features-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            margin: 2rem 0;
         }
 
         @media (max-width: 640px) {
@@ -285,11 +232,10 @@
         }
 
         .feature-card {
-            background: white;
-            border: 1px solid var(--slate-200);
+            background: var(--card);
+            border: 1px solid var(--border);
             border-radius: 0.5rem;
             padding: 1.25rem;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
         }
 
         .feature-card-header {
@@ -302,54 +248,35 @@
         .feature-dot {
             width: 0.5rem;
             height: 0.5rem;
-            background: var(--orange-700);
-            border-radius: 9999px;
+            background: var(--primary);
+            border-radius: 50%;
         }
 
         .feature-card-header h3 {
-            font-size: 0.875rem;
+            font-size: 1rem;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--orange-800);
+            color: var(--foreground);
         }
 
         .feature-card p {
-            color: var(--slate-800);
+            color: var(--muted);
+            font-size: 0.9375rem;
+            margin: 0;
         }
 
-        /* Comparison Section */
-        .comparison-section {
-            padding: 0 0 4rem;
-        }
-
-        .comparison-section h2 {
-            font-family: 'Source Serif 4', ui-serif, Georgia, serif;
-            font-size: 1.875rem;
-            font-weight: 600;
-            letter-spacing: -0.025em;
-            color: var(--orange-900);
-            margin-bottom: 0.75rem;
-        }
-
-        .comparison-section > .container > p {
-            font-size: 1.125rem;
-            color: var(--slate-700);
-            margin-bottom: 2rem;
-        }
-
+        /* Comparison Table */
         .comparison-table {
-            background: white;
-            border: 1px solid var(--slate-200);
+            background: var(--card);
+            border: 1px solid var(--border);
             border-radius: 0.5rem;
             overflow: hidden;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            margin: 2rem 0;
         }
 
         .comparison-row {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            border-bottom: 1px solid var(--slate-200);
+            border-bottom: 1px solid var(--border);
         }
 
         .comparison-row:last-child {
@@ -357,70 +284,52 @@
         }
 
         .comparison-row.header {
-            background: var(--slate-100);
+            background: var(--border);
             font-weight: 600;
             font-size: 0.875rem;
         }
 
         .comparison-cell {
             padding: 1rem 1.25rem;
-            font-size: 0.875rem;
+            font-size: 0.9375rem;
         }
 
         .comparison-cell:not(:last-child) {
-            border-right: 1px solid var(--slate-200);
+            border-right: 1px solid var(--border);
         }
 
         .check {
-            color: var(--green-500);
+            color: var(--green);
             font-weight: 500;
         }
 
         .x {
-            color: var(--slate-400);
+            color: var(--muted-light);
         }
 
-        /* Pricing Section */
-        .pricing-section {
-            padding: 0 0 4rem;
-        }
-
-        .pricing-section h2 {
-            font-size: 1.875rem;
-            font-weight: 600;
-            letter-spacing: -0.025em;
-            color: var(--orange-900);
-            margin-bottom: 0.75rem;
-        }
-
-        .pricing-section > .container > p {
-            font-size: 1.125rem;
-            color: var(--slate-700);
-            margin-bottom: 2rem;
-        }
-
+        /* Pricing Grid */
         .pricing-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 1.5rem;
+            margin: 2rem 0;
         }
 
-        @media (max-width: 1024px) {
+        @media (max-width: 768px) {
             .pricing-grid {
                 grid-template-columns: 1fr;
             }
         }
 
         .pricing-card {
-            background: white;
-            border: 1px solid var(--slate-200);
+            background: var(--card);
+            border: 1px solid var(--border);
             border-radius: 0.5rem;
             padding: 1.5rem;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
         }
 
         .pricing-card.featured {
-            border-color: var(--orange-700);
+            border-color: var(--primary);
             position: relative;
         }
 
@@ -430,7 +339,7 @@
             top: -0.75rem;
             left: 50%;
             transform: translateX(-50%);
-            background: var(--orange-700);
+            background: var(--primary);
             color: white;
             padding: 0.25rem 0.75rem;
             border-radius: 9999px;
@@ -447,14 +356,14 @@
         .pricing-card .price {
             font-size: 2rem;
             font-weight: 700;
-            color: var(--orange-700);
+            color: var(--primary);
             margin-bottom: 1.5rem;
         }
 
         .pricing-card .price span {
             font-size: 1rem;
             font-weight: 400;
-            color: var(--slate-500);
+            color: var(--muted);
         }
 
         .pricing-card ul {
@@ -464,9 +373,9 @@
 
         .pricing-card li {
             padding: 0.5rem 0;
-            color: var(--slate-700);
-            font-size: 0.875rem;
-            border-bottom: 1px solid var(--slate-100);
+            color: var(--muted);
+            font-size: 0.9375rem;
+            border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -476,35 +385,35 @@
             border-bottom: none;
         }
 
-        .pricing-card li svg {
-            color: var(--green-500);
+        .pricing-card li::before {
+            content: '';
+            width: 0.5rem;
+            height: 0.5rem;
+            background: var(--green);
+            border-radius: 50%;
             flex-shrink: 0;
         }
 
         .pricing-card .btn {
             width: 100%;
+            justify-content: center;
         }
 
         /* CTA Section */
         .cta-section {
-            padding: 4rem 0 5rem;
             text-align: center;
+            padding: 4rem 0;
+            border-top: 1px solid var(--border);
         }
 
         .cta-section h2 {
-            font-family: 'Source Serif 4', ui-serif, Georgia, serif;
-            font-size: 1.875rem;
-            font-weight: 600;
             margin-bottom: 1rem;
         }
 
         .cta-section p {
-            font-size: 1.125rem;
-            color: var(--slate-700);
-            margin-bottom: 0.5rem;
-            max-width: 48rem;
-            margin-left: auto;
-            margin-right: auto;
+            color: var(--muted);
+            max-width: 32rem;
+            margin: 0 auto 1.5rem;
         }
 
         .cta-buttons {
@@ -512,246 +421,106 @@
             justify-content: center;
             gap: 1rem;
             flex-wrap: wrap;
-            margin-top: 1.5rem;
-        }
-
-        /* Waitlist Form */
-        .waitlist-section {
-            padding: 4rem 0 5rem;
-            background: linear-gradient(to bottom, var(--slate-50), white);
-        }
-
-        .waitlist-card {
-            max-width: 32rem;
-            margin: 0 auto;
-            background: white;
-            border: 1px solid var(--slate-200);
-            border-radius: 0.75rem;
-            padding: 2rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-        }
-
-        .waitlist-card h2 {
-            font-family: 'Source Serif 4', ui-serif, Georgia, serif;
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--orange-900);
-            margin-bottom: 0.5rem;
-            text-align: center;
-        }
-
-        .waitlist-card > p {
-            color: var(--slate-600);
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .waitlist-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        @media (max-width: 480px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.375rem;
-        }
-
-        .form-group label {
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: var(--slate-700);
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            padding: 0.625rem 0.875rem;
-            border: 1px solid var(--slate-300);
-            border-radius: 0.375rem;
-            font-size: 0.875rem;
-            font-family: inherit;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--orange-600);
-            box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1);
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 4rem;
-        }
-
-        .waitlist-submit {
-            margin-top: 0.5rem;
-        }
-
-        .waitlist-submit .btn {
-            width: 100%;
-            padding: 0.75rem 1.5rem;
-        }
-
-        .waitlist-submit .btn:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-
-        .form-success {
-            text-align: center;
-            padding: 1.5rem;
-        }
-
-        .form-success h3 {
-            font-family: 'Source Serif 4', ui-serif, Georgia, serif;
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--orange-900);
-            margin-bottom: 0.75rem;
-        }
-
-        .form-success p {
-            color: var(--slate-600);
-            line-height: 1.6;
-        }
-
-        .form-error {
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            color: #991b1b;
-            padding: 0.75rem;
-            border-radius: 0.375rem;
-            font-size: 0.875rem;
-            text-align: center;
         }
 
         /* Footer */
         footer {
-            background: var(--slate-950);
-            color: var(--slate-300);
-            padding: 2.5rem 0;
+            border-top: 1px solid var(--border);
+            padding: 2rem 0;
+            margin-top: 2rem;
         }
 
         .footer-inner {
             display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        @media (min-width: 768px) {
-            .footer-inner {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 2rem;
         }
 
         .footer-brand {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 700;
-            color: white;
+            color: var(--primary);
         }
 
         .footer-tagline {
-            color: var(--slate-400);
-            max-width: 24rem;
+            color: var(--muted);
+            font-size: 0.9375rem;
             margin-top: 0.5rem;
         }
 
         .footer-copy {
-            font-size: 0.875rem;
-            color: var(--slate-500);
-            margin-top: 0.75rem;
+            font-size: 0.8125rem;
+            color: var(--muted-light);
+            margin-top: 0.5rem;
         }
 
         .footer-links {
             display: flex;
-            gap: 2rem;
+            gap: 1.5rem;
         }
 
         .footer-links a {
-            color: var(--slate-400);
-            text-decoration: none;
-            font-size: 0.875rem;
+            color: var(--muted);
+            font-size: 0.9375rem;
         }
 
-        .footer-links a:hover {
-            color: white;
+        @media (max-width: 640px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .nav-links {
+                gap: 1rem;
+            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <nav class="nav">
-            <div class="container">
-                <div class="nav-inner">
-                    <a href="/" class="nav-brand">
-                        <span class="nav-brand-text">protobuf.ai</span>
-                    </a>
-                    <ul class="nav-links">
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/blog/">Blog</a></li>
-                        <li><a href="https://github.com/protobuf-ai/">GitHub</a></li>
-                        <li><a href="#waitlist" class="btn btn-primary">Join Waitlist</a></li>
-                    </ul>
-                </div>
+    <nav>
+        <div class="container-wide">
+            <div class="nav-inner">
+                <a href="/" class="nav-brand">protobuf.ai</a>
+                <ul class="nav-links">
+                    <li><a href="/registry.html">Registry</a></li>
+                    <li><a href="/blog/">Blog</a></li>
+                    <li><a href="https://github.com/protobuf-ai/">GitHub</a></li>
+                </ul>
             </div>
-        </nav>
+        </div>
+    </nav>
 
-        <section class="hero">
-            <div class="container">
-                <div class="hero-badge">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
-                    <span>AI-native schema discovery</span>
+    <section class="hero">
+        <div class="container">
+            <div class="hero-badge">AI-native schema discovery</div>
+            <h1>The Semantic Schema Registry</h1>
+            <p class="hero-lead">Store schemas. Understand meaning. Power AI discovery. The first schema registry built for how AI actually works.</p>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="hero-stat-value">Semantic</span>
+                    <span class="hero-stat-label">Not just structural</span>
                 </div>
-                <h1>The Semantic Schema Registry</h1>
-                <p class="hero-lead">Store schemas. Understand meaning. Power AI discovery. The first schema registry built for how AI actually works.</p>
-                <div class="hero-stats">
-                    <div class="hero-stat">
-                        <span class="hero-stat-value">Semantic</span>
-                        <span class="hero-stat-label">Not just structural</span>
-                    </div>
-                    <div class="hero-stat">
-                        <span class="hero-stat-value">AI-Native</span>
-                        <span class="hero-stat-label">Built for agents</span>
-                    </div>
-                    <div class="hero-stat">
-                        <span class="hero-stat-value">Ontology-Mapped</span>
-                        <span class="hero-stat-label">schema.org compatible</span>
-                    </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">AI-Native</span>
+                    <span class="hero-stat-label">Built for agents</span>
                 </div>
-                <div class="hero-cta">
-                    <a href="#waitlist" class="btn btn-primary">Join the Waitlist <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
-                    <a href="https://github.com/protobuf-ai/" class="btn btn-ghost">View on GitHub</a>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">Ontology-Mapped</span>
+                    <span class="hero-stat-label">schema.org compatible</span>
                 </div>
             </div>
-        </section>
-    </header>
+            <div class="hero-cta">
+                <a href="https://registry.protobuf.ai" class="btn btn-primary">Explore the Registry</a>
+                <a href="https://github.com/protobuf-ai/" class="btn btn-outline">View on GitHub</a>
+            </div>
+        </div>
+    </section>
 
     <main>
-        <section class="features-section">
-            <div class="container">
-                <div class="features-header">
-                    <h2>Beyond schema storage</h2>
-                    <p>Everything you need to make your schemas discoverable, understandable, and AI-ready.</p>
-                </div>
+        <section>
+            <div class="container-wide">
+                <h2>Beyond schema storage</h2>
+                <p>Everything you need to make your schemas discoverable, understandable, and AI-ready.</p>
                 <div class="features-grid">
                     <div class="feature-card">
                         <div class="feature-card-header">
@@ -799,8 +568,8 @@
             </div>
         </section>
 
-        <section class="comparison-section">
-            <div class="container">
+        <section>
+            <div class="container-wide">
                 <h2>Traditional vs. semantic</h2>
                 <p>See what you gain when your registry understands meaning, not just structure.</p>
                 <div class="comparison-table">
@@ -853,71 +622,68 @@
             </div>
         </section>
 
-        <section class="waitlist-section" id="waitlist">
-            <div class="container">
-                <div class="waitlist-card">
-                    <h2>Join the Early Access Waitlist</h2>
-                    <p>Be the first to try the semantic schema registry. We're onboarding teams now.</p>
-
-                    <form class="waitlist-form" id="waitlist-form">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="name">Name *</label>
-                                <input type="text" id="name" name="name" required placeholder="Your name">
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email *</label>
-                                <input type="email" id="email" name="email" required placeholder="you@company.com">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="company">Company</label>
-                            <input type="text" id="company" name="company" placeholder="Your company (optional)">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="useCase">Primary Use Case *</label>
-                            <select id="useCase" name="useCase" required>
-                                <option value="">Select your use case...</option>
-                                <option value="rapid-prototyping">Rapid Prototyping - ship schemas faster</option>
-                                <option value="team-development">Team Development - coordinate schema changes</option>
-                                <option value="api-design">API Design - design before implementation</option>
-                                <option value="migration">Migration - modernize legacy protobufs</option>
-                                <option value="learning">Learning - level up proto expertise</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="message">Anything else? (optional)</label>
-                            <textarea id="message" name="message" placeholder="Tell us about your schema workflow..."></textarea>
-                        </div>
-
-                        <div class="waitlist-submit">
-                            <button type="submit" class="btn btn-primary" id="submit-btn">
-                                Join Waitlist
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                            </button>
-                        </div>
-
-                        <div id="form-message" style="display: none;"></div>
-                    </form>
-
-                    <div class="form-success" id="form-success" style="display: none;">
-                        <h3>You're on the list!</h3>
-                        <p id="success-message"></p>
+        <section>
+            <div class="container-wide">
+                <h2>Simple, transparent pricing</h2>
+                <p>Start free. Scale as you grow. No surprises.</p>
+                <div class="pricing-grid">
+                    <div class="pricing-card">
+                        <h3>Open Source</h3>
+                        <div class="price">Free</div>
+                        <ul>
+                            <li>Unlimited public schemas</li>
+                            <li>context.json generation</li>
+                            <li>Semantic search</li>
+                            <li>Community support</li>
+                        </ul>
+                        <a href="https://github.com/protobuf-ai/" class="btn btn-outline">Get Started</a>
                     </div>
+                    <div class="pricing-card featured">
+                        <h3>Team</h3>
+                        <div class="price">$49<span>/mo</span></div>
+                        <ul>
+                            <li>Private schemas</li>
+                            <li>Breaking change detection</li>
+                            <li>Ontology validation</li>
+                            <li>SDK generation</li>
+                            <li>Priority support</li>
+                        </ul>
+                        <a href="https://registry.protobuf.ai/signup" class="btn btn-primary">Start Free Trial</a>
+                    </div>
+                    <div class="pricing-card">
+                        <h3>Enterprise</h3>
+                        <div class="price">Custom</div>
+                        <ul>
+                            <li>Self-hosted option</li>
+                            <li>SSO / SAML</li>
+                            <li>Custom ontologies</li>
+                            <li>SLA guarantees</li>
+                            <li>Dedicated support</li>
+                        </ul>
+                        <a href="mailto:enterprise@protobuf.ai" class="btn btn-outline">Contact Sales</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="container">
+                <h2>Ready for AI-native schemas?</h2>
+                <p>Import your existing schemas. We'll add the meaning. Stop letting AI guess what your data structures mean.</p>
+                <div class="cta-buttons">
+                    <a href="https://registry.protobuf.ai" class="btn btn-primary">Get Started Free</a>
+                    <a href="/" class="btn btn-outline">Learn About context.json</a>
                 </div>
             </div>
         </section>
     </main>
 
     <footer>
-        <div class="container">
+        <div class="container-wide">
             <div class="footer-inner">
                 <div>
                     <div class="footer-brand">protobuf.ai</div>
-                    <p class="footer-tagline">The semantic layer for Protocol Buffers. Make your APIs AI-native.</p>
+                    <p class="footer-tagline">The semantic layer for Protocol Buffers.</p>
                     <p class="footer-copy">&copy; 2026 Voyant, LLC</p>
                 </div>
                 <div class="footer-links">
@@ -928,60 +694,5 @@
             </div>
         </div>
     </footer>
-    <script src="/tracking.js" data-org="protobuf"></script>
-    <script>
-    document.getElementById('waitlist-form').addEventListener('submit', async function(e) {
-        e.preventDefault();
-
-        const form = e.target;
-        const submitBtn = document.getElementById('submit-btn');
-        const formMessage = document.getElementById('form-message');
-        const formSuccess = document.getElementById('form-success');
-        const successMessage = document.getElementById('success-message');
-
-        // Disable button and show loading state
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = 'Submitting...';
-        formMessage.style.display = 'none';
-
-        const formData = {
-            name: form.name.value.trim(),
-            email: form.email.value.trim(),
-            company: form.company.value.trim() || undefined,
-            useCase: form.useCase.value,
-            message: form.message.value.trim() || undefined
-        };
-
-        try {
-            const response = await fetch('/api/waitlist', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-            });
-
-            const data = await response.json();
-
-            if (response.ok && data.success) {
-                // Hide form, show success
-                form.style.display = 'none';
-                successMessage.textContent = data.aiResponse || 'Thanks for joining! We\'ll be in touch soon.';
-                formSuccess.style.display = 'block';
-            } else {
-                // Show error
-                formMessage.className = 'form-error';
-                formMessage.textContent = data.error || 'Something went wrong. Please try again.';
-                formMessage.style.display = 'block';
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = 'Join Waitlist <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>';
-            }
-        } catch (err) {
-            formMessage.className = 'form-error';
-            formMessage.textContent = 'Network error. Please check your connection and try again.';
-            formMessage.style.display = 'block';
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = 'Join Waitlist <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>';
-        }
-    });
-    </script>
 </body>
 </html>

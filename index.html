@@ -15,67 +15,56 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@protobufai">
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --slate-50: #f8fafc;
-            --slate-100: #f1f5f9;
-            --slate-200: #e2e8f0;
-            --slate-300: #cbd5e1;
-            --slate-400: #94a3b8;
-            --slate-500: #64748b;
-            --slate-600: #475569;
-            --slate-700: #334155;
-            --slate-800: #1e293b;
-            --slate-900: #0f172a;
-            --slate-950: #020617;
-            --orange-50: #fff7ed;
-            --orange-100: #ffedd5;
-            --orange-600: #ea580c;
-            --orange-700: #c2410c;
-            --orange-800: #9a3412;
-            --orange-900: #7c2d12;
+            --background: #f8fafc;
+            --foreground: #0f172a;
+            --primary: #b45309;
+            --primary-light: #d97706;
+            --primary-dark: #92400e;
+            --muted: #64748b;
+            --muted-light: #94a3b8;
+            --border: #e2e8f0;
+            --card: #ffffff;
         }
 
         body {
-            font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
-            line-height: 1.6;
-            color: var(--slate-900);
-            background: var(--slate-950);
+            font-family: 'Source Serif 4', ui-serif, Georgia, 'Times New Roman', serif;
+            line-height: 1.7;
+            color: var(--foreground);
+            background: var(--background);
             -webkit-font-smoothing: antialiased;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 720px;
             margin: 0 auto;
-            padding: 0 1rem;
+            padding: 0 1.5rem;
         }
 
-        /* Header */
-        header {
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(to bottom right, var(--slate-950), var(--slate-900), var(--slate-950));
+        .container-wide {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
         }
 
-        header::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            opacity: 0.3;
-            background:
-                radial-gradient(circle at top right, rgba(92, 240, 217, 0.15), transparent 35%),
-                radial-gradient(circle at 20% 30%, rgba(247, 181, 0, 0.12), transparent 30%);
-            pointer-events: none;
+        a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
         }
 
         /* Nav */
-        .nav {
-            position: relative;
+        nav {
             padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border);
         }
 
         .nav-inner {
@@ -85,427 +74,164 @@
         }
 
         .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            text-decoration: none;
-        }
-
-        .nav-brand-text {
             font-size: 1.25rem;
-            font-weight: 600;
-            color: white;
-            letter-spacing: -0.025em;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
         }
 
         .nav-links {
             display: flex;
-            gap: 1.5rem;
-            align-items: center;
+            gap: 2rem;
             list-style: none;
         }
 
         .nav-links a {
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            font-size: 0.875rem;
-            font-weight: 500;
-            transition: color 0.2s;
+            color: var(--muted);
+            font-size: 0.9375rem;
         }
 
         .nav-links a:hover {
-            color: white;
+            color: var(--foreground);
+            text-decoration: none;
+        }
+
+        /* Hero */
+        .hero {
+            padding: 4rem 0 3rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-lead {
+            font-size: 1.25rem;
+            color: var(--foreground);
+            margin-bottom: 1rem;
+        }
+
+        .hero-sub {
+            font-size: 1.125rem;
+            color: var(--muted);
+            margin-bottom: 2rem;
         }
 
         .btn {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
             gap: 0.5rem;
-            padding: 0.625rem 1.25rem;
+            padding: 0.75rem 1.5rem;
             border-radius: 0.375rem;
-            font-size: 0.875rem;
-            font-weight: 500;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
             text-decoration: none;
-            transition: all 0.2s;
+            transition: all 0.15s;
             border: none;
             cursor: pointer;
         }
 
         .btn-primary {
-            background: var(--orange-700);
+            background: var(--primary);
             color: white;
         }
 
         .btn-primary:hover {
-            background: var(--orange-600);
+            background: var(--primary-light);
+            text-decoration: none;
         }
 
         .btn-outline {
             background: transparent;
-            color: var(--orange-800);
-            border: 1px solid var(--orange-700);
+            color: var(--primary);
+            border: 1.5px solid var(--primary);
         }
 
         .btn-outline:hover {
-            background: var(--orange-50);
-        }
-
-        .btn-ghost {
-            background: transparent;
+            background: var(--primary);
             color: white;
-        }
-
-        .btn-ghost:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Hero */
-        .hero {
-            position: relative;
-            padding: 2rem 0 4rem;
-        }
-
-        .hero-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-        }
-
-        @media (max-width: 1024px) {
-            .hero-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .hero-content {
-            color: white;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.375rem 0.75rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 600;
-            line-height: 1.1;
-            letter-spacing: -0.025em;
-            margin-bottom: 1.5rem;
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.25rem;
-            }
-        }
-
-        .hero-lead {
-            font-size: 1.125rem;
-            color: rgba(255, 255, 255, 0.85);
-            margin-bottom: 1rem;
-            max-width: 540px;
-        }
-
-        .hero-sub {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 2rem;
-            max-width: 540px;
+            text-decoration: none;
         }
 
         .hero-cta {
             display: flex;
-            gap: 0.75rem;
+            gap: 1rem;
             flex-wrap: wrap;
             margin-bottom: 1rem;
         }
 
         .hero-note {
             font-size: 0.875rem;
-            color: rgba(255, 255, 255, 0.6);
+            color: var(--muted-light);
         }
 
-        /* Hero Cards */
-        .hero-cards {
-            position: relative;
+        /* Sections */
+        section {
+            padding: 3rem 0;
         }
 
-        .hero-cards::before {
-            content: '';
-            position: absolute;
-            top: -2.5rem;
-            right: -2rem;
-            width: 12rem;
-            height: 12rem;
-            background: rgba(234, 88, 12, 0.3);
-            border-radius: 9999px;
-            filter: blur(3rem);
-        }
-
-        .hero-cards::after {
-            content: '';
-            position: absolute;
-            bottom: -3rem;
-            left: -2.5rem;
-            width: 10rem;
-            height: 10rem;
-            background: rgba(234, 88, 12, 0.2);
-            border-radius: 9999px;
-            filter: blur(3rem);
-        }
-
-        .hero-card-stack {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1rem;
-            padding: 1.5rem;
-        }
-
-        .hero-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 0.5rem;
-            padding: 1rem;
-            color: white;
-        }
-
-        .hero-card-label {
-            font-size: 0.875rem;
-            color: rgba(255, 255, 255, 0.6);
-            margin-bottom: 0.25rem;
-        }
-
-        .hero-card-text {
-            font-size: 1.125rem;
-            font-weight: 600;
-        }
-
-        /* Integrations Bar */
-        .integrations {
-            background: var(--slate-900);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 2.5rem 0;
-        }
-
-        .integrations-label {
-            text-align: center;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--slate-400);
-            margin-bottom: 1.5rem;
-        }
-
-        .integrations-logos {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 3rem;
-            flex-wrap: wrap;
-            opacity: 0.6;
-        }
-
-        .integrations-logos span {
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: white;
-        }
-
-        /* Main Content */
-        main {
-            background: var(--slate-50);
-            color: var(--slate-900);
-        }
-
-        /* Problem Section */
-        .problem-section {
-            padding: 4rem 0;
-        }
-
-        .problem-section h2 {
-            font-size: 1.875rem;
-            font-weight: 600;
-            letter-spacing: -0.025em;
-            color: var(--orange-900);
-            margin-bottom: 1.5rem;
-        }
-
-        .problem-section p {
-            font-size: 1.125rem;
-            color: var(--slate-700);
+        section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
             margin-bottom: 1rem;
-            max-width: 48rem;
         }
 
-        .check-list {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-top: 2rem;
+        section p {
+            margin-bottom: 1rem;
         }
 
-        @media (max-width: 768px) {
-            .check-list {
-                grid-template-columns: 1fr;
-            }
+        /* Features List */
+        .features-list {
+            list-style: none;
+            margin: 1.5rem 0;
         }
 
-        .check-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
-        }
-
-        .check-icon {
-            flex-shrink: 0;
-            width: 1.5rem;
-            height: 1.5rem;
-            background: var(--orange-100);
-            border-radius: 9999px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 0.125rem;
-        }
-
-        .check-icon svg {
-            width: 1rem;
-            height: 1rem;
-            color: var(--orange-800);
-        }
-
-        .check-item span {
-            color: var(--slate-700);
-        }
-
-        /* Features Section */
-        .features-section {
-            padding: 0 0 4rem;
-        }
-
-        .features-header {
-            margin-bottom: 2rem;
-        }
-
-        .features-header h2 {
-            font-size: 1.875rem;
-            font-weight: 600;
-            letter-spacing: -0.025em;
-            color: var(--orange-900);
+        .features-list li {
+            position: relative;
+            padding-left: 1.75rem;
             margin-bottom: 0.75rem;
         }
 
-        .features-header p {
-            font-size: 1.125rem;
-            color: var(--slate-700);
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-        }
-
-        @media (max-width: 768px) {
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .feature-card {
-            background: white;
-            border: 1px solid var(--slate-200);
-            border-radius: 0.5rem;
-            padding: 1.25rem;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-        }
-
-        .feature-card-header {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .feature-dot {
+        .features-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
             width: 0.5rem;
             height: 0.5rem;
-            background: var(--orange-700);
-            border-radius: 9999px;
+            background: var(--primary);
+            border-radius: 50%;
         }
 
-        .feature-card-header h3 {
-            font-size: 0.875rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--orange-800);
-        }
-
-        .feature-card p {
-            color: var(--slate-800);
-        }
-
-        /* Code Section */
+        /* Code */
         .code-section {
-            padding: 0 0 4rem;
-        }
-
-        .code-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
-
-        @media (max-width: 1024px) {
-            .code-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .code-card {
-            background: white;
-            border: 1px solid var(--slate-200);
+            background: var(--card);
+            border: 1px solid var(--border);
             border-radius: 0.5rem;
             overflow: hidden;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            margin: 2rem 0;
         }
 
-        .code-card h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            padding: 1.5rem;
-            padding-bottom: 0.75rem;
-        }
-
-        .code-card > p {
-            padding: 0 1.5rem 1rem;
+        .code-section h3 {
             font-size: 1.125rem;
-            color: var(--slate-700);
+            font-weight: 600;
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border);
         }
 
         .code-block {
-            background: var(--slate-900);
+            background: #1e293b;
             padding: 1.25rem;
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.8125rem;
             line-height: 1.6;
-            color: white;
+            color: #e2e8f0;
             overflow-x: auto;
         }
 
@@ -513,79 +239,79 @@
         .code-block .string { color: #86efac; }
         .code-block .comment { color: #64748b; }
 
-        /* How It Works */
-        .how-section {
-            padding: 0 0 4rem;
-        }
-
-        .how-section h2 {
-            font-size: 1.875rem;
-            font-weight: 600;
-            letter-spacing: -0.025em;
-            color: var(--orange-900);
-            margin-bottom: 0.75rem;
-        }
-
-        .how-section > .container > p {
-            font-size: 1.125rem;
-            color: var(--slate-700);
-            margin-bottom: 2rem;
-        }
-
-        .steps-grid {
+        /* Steps */
+        .steps {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 1.5rem;
-        }
-
-        @media (max-width: 1024px) {
-            .steps-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            margin: 2rem 0;
         }
 
         @media (max-width: 640px) {
-            .steps-grid {
+            .steps {
                 grid-template-columns: 1fr;
             }
         }
 
-        .step-card {
-            background: var(--slate-100);
+        .step {
+            background: var(--card);
+            border: 1px solid var(--border);
             border-radius: 0.5rem;
-            padding: 1rem;
+            padding: 1.25rem;
         }
 
-        .step-card h3 {
+        .step h3 {
+            font-size: 1rem;
             font-weight: 600;
-            color: var(--slate-900);
-            margin-bottom: 0.25rem;
+            color: var(--foreground);
+            margin-bottom: 0.5rem;
         }
 
-        .step-card p {
-            font-size: 0.875rem;
-            color: var(--slate-600);
+        .step p {
+            font-size: 0.9375rem;
+            color: var(--muted);
+            margin: 0;
         }
 
-        /* CTA Section */
-        .cta-section {
-            padding: 4rem 0 5rem;
+        /* Integrations */
+        .integrations {
             text-align: center;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .integrations-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--muted-light);
+            margin-bottom: 1rem;
+        }
+
+        .integrations-logos {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        /* CTA */
+        .cta-section {
+            text-align: center;
+            padding: 4rem 0;
         }
 
         .cta-section h2 {
-            font-size: 1.875rem;
-            font-weight: 600;
             margin-bottom: 1rem;
         }
 
         .cta-section p {
-            font-size: 1.125rem;
-            color: var(--slate-700);
-            margin-bottom: 0.5rem;
-            max-width: 48rem;
-            margin-left: auto;
-            margin-right: auto;
+            color: var(--muted);
+            max-width: 32rem;
+            margin: 0 auto 1.5rem;
         }
 
         .cta-buttons {
@@ -593,205 +319,129 @@
             justify-content: center;
             gap: 1rem;
             flex-wrap: wrap;
-            margin-top: 1.5rem;
         }
 
         /* Footer */
         footer {
-            background: var(--slate-950);
-            color: var(--slate-300);
-            padding: 2.5rem 0;
+            border-top: 1px solid var(--border);
+            padding: 2rem 0;
+            margin-top: 2rem;
         }
 
         .footer-inner {
             display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        @media (min-width: 768px) {
-            .footer-inner {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 2rem;
         }
 
         .footer-brand {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 700;
-            color: white;
+            color: var(--primary);
         }
 
         .footer-tagline {
-            color: var(--slate-400);
-            max-width: 24rem;
+            color: var(--muted);
+            font-size: 0.9375rem;
             margin-top: 0.5rem;
         }
 
         .footer-copy {
-            font-size: 0.875rem;
-            color: var(--slate-500);
-            margin-top: 0.75rem;
+            font-size: 0.8125rem;
+            color: var(--muted-light);
+            margin-top: 0.5rem;
         }
 
         .footer-links {
             display: flex;
-            gap: 2rem;
+            gap: 1.5rem;
         }
 
         .footer-links a {
-            color: var(--slate-400);
-            text-decoration: none;
-            font-size: 0.875rem;
+            color: var(--muted);
+            font-size: 0.9375rem;
         }
 
-        .footer-links a:hover {
-            color: white;
+        @media (max-width: 640px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .nav-links {
+                gap: 1rem;
+            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <nav class="nav">
-            <div class="container">
-                <div class="nav-inner">
-                    <a href="/" class="nav-brand">
-                        <span class="nav-brand-text">protobuf.ai</span>
-                    </a>
-                    <ul class="nav-links">
-                        <li><a href="/registry.html">Registry</a></li>
-                        <li><a href="/blog/">Blog</a></li>
-                        <li><a href="https://github.com/protobuf-ai/">GitHub</a></li>
-                        <li><a href="#get-started" class="btn btn-primary">Get Started</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <section class="hero">
-            <div class="container">
-                <div class="hero-grid">
-                    <div class="hero-content">
-                        <div class="hero-badge">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path></svg>
-                            <span>The semantic layer for Protocol Buffers</span>
-                        </div>
-                        <h1>Protocol Buffers for the AI Era</h1>
-                        <p class="hero-lead">AI agents can read your schemas. They just can't understand them.</p>
-                        <p class="hero-sub"><strong>context.json</strong> adds the semantic layer that makes your APIs AI-native. Structure got us here. Meaning gets us where we're going.</p>
-                        <div class="hero-cta">
-                            <a href="#get-started" class="btn btn-primary">Get Started <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
-                            <a href="https://github.com/protobuf-ai/" class="btn btn-ghost">View on GitHub</a>
-                        </div>
-                    </div>
-                    <div class="hero-cards">
-                        <div class="hero-card-stack">
-                            <div class="hero-card">
-                                <div class="hero-card-label">What AI sees</div>
-                                <div class="hero-card-text">int64 amount, string currency, string status</div>
-                            </div>
-                            <div class="hero-card">
-                                <div class="hero-card-label">What AI needs</div>
-                                <div class="hero-card-text">Amount in cents, ISO 4217 currency, state machine with transitions</div>
-                            </div>
-                            <div class="hero-card">
-                                <div class="hero-card-label">What context.json provides</div>
-                                <div class="hero-card-text">Semantic meaning, ontology mapping, edge cases, relationships</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </header>
-
-    <section class="integrations">
-        <div class="container">
-            <p class="integrations-label">Works with your existing protobuf tools</p>
-            <div class="integrations-logos">
-                <span>Buf</span>
-                <span>gRPC</span>
-                <span>Connect</span>
-                <span>protoc</span>
-                <span>Schema Registry</span>
+    <nav>
+        <div class="container-wide">
+            <div class="nav-inner">
+                <a href="/" class="nav-brand">protobuf.ai</a>
+                <ul class="nav-links">
+                    <li><a href="/registry.html">Registry</a></li>
+                    <li><a href="/blog/">Blog</a></li>
+                    <li><a href="https://github.com/protobuf-ai/">GitHub</a></li>
+                </ul>
             </div>
         </div>
-    </section>
+    </nav>
 
     <main>
-        <section class="problem-section">
+        <section class="hero">
             <div class="container">
-                <h2>Stop AI from guessing your schema semantics</h2>
+                <h1>Protocol Buffers for the AI Era</h1>
+                <p class="hero-lead">AI agents can read your schemas. They just can't understand them.</p>
+                <p class="hero-sub"><strong>context.json</strong> adds the semantic layer that makes your APIs AI-native. Structure got us here. Meaning gets us where we're going.</p>
+                <div class="hero-cta">
+                    <a href="https://github.com/protobuf-ai/" class="btn btn-primary">Get Started</a>
+                    <a href="/blog/introducing-protobuf-ai.html" class="btn btn-outline">Read the Manifesto</a>
+                </div>
+                <p class="hero-note">Open source. MIT licensed.</p>
+            </div>
+        </section>
+
+        <section class="integrations">
+            <div class="container-wide">
+                <p class="integrations-label">Works with your existing protobuf tools</p>
+                <div class="integrations-logos">
+                    <span>Buf</span>
+                    <span>gRPC</span>
+                    <span>Connect</span>
+                    <span>protoc</span>
+                    <span>Schema Registry</span>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <h2>The problem</h2>
                 <p>When AI agents integrate with your API, they see field names and types. They don't know that <code>amount</code> is in cents, that <code>status</code> follows a state machine, or that refunds use negative values.</p>
                 <p>context.json gives every AI tool a single, always-current source of truth for what your schema actually means—so integrations work correctly without reverse-engineering your documentation.</p>
-                <div class="check-list">
-                    <div class="check-item">
-                        <div class="check-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></div>
-                        <span>AI-generated integrations work correctly by default—no trial and error.</span>
-                    </div>
-                    <div class="check-item">
-                        <div class="check-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></div>
-                        <span>Update semantic context once—every AI agent picks it up instantly.</span>
-                    </div>
-                    <div class="check-item">
-                        <div class="check-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></div>
-                        <span>Ontology mapping validates that fields match their intended meaning.</span>
-                    </div>
-                    <div class="check-item">
-                        <div class="check-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></div>
-                        <span>Works alongside your existing Buf, protoc, and gRPC tooling.</span>
-                    </div>
-                </div>
             </div>
         </section>
 
-        <section class="features-section">
+        <section>
             <div class="container">
-                <div class="features-header">
-                    <h2>One file. Complete semantic context.</h2>
-                    <p>Everything AI agents need to understand your API—organized, versioned, and always up to date.</p>
-                </div>
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-card-header">
-                            <div class="feature-dot"></div>
-                            <h3>AI Discovery</h3>
-                        </div>
-                        <p>When developers ask "what should I use for payments?", AI agents find your API through semantic search—not keyword matching.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-card-header">
-                            <div class="feature-dot"></div>
-                            <h3>Correct Implementation</h3>
-                        </div>
-                        <p>AI understands that amount is in cents, currency is ISO 4217, and refunds use negative values. First integration works.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-card-header">
-                            <div class="feature-dot"></div>
-                            <h3>Ontology Validation</h3>
-                        </div>
-                        <p>Map fields to schema.org or custom ontologies. Catch semantic mismatches before they become production bugs.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-card-header">
-                            <div class="feature-dot"></div>
-                            <h3>Cross-Schema Compatibility</h3>
-                        </div>
-                        <p>Two APIs with different field names but the same meaning? context.json knows they're compatible.</p>
-                    </div>
-                </div>
+                <h2>What context.json does</h2>
+                <ul class="features-list">
+                    <li><strong>AI Discovery:</strong> Developers ask "what should I use for payments?" and AI agents find your API through semantic search—not keyword matching.</li>
+                    <li><strong>Correct Implementation:</strong> AI understands that amount is in cents, currency is ISO 4217, and refunds use negative values. First integration works.</li>
+                    <li><strong>Ontology Validation:</strong> Map fields to schema.org or custom ontologies. Catch semantic mismatches before they become production bugs.</li>
+                    <li><strong>Cross-Schema Compatibility:</strong> Two APIs with different field names but the same meaning? context.json knows they're compatible.</li>
+                </ul>
             </div>
         </section>
 
-        <section class="code-section">
+        <section>
             <div class="container">
-                <div class="code-grid">
-                    <div class="code-card">
-                        <h3>Strategy-as-Code</h3>
-                        <p>Your schema semantics, version-controlled and API-accessible.</p>
-                        <div class="code-block"><span class="comment">// payment.context.json</span>
+                <h2>Strategy-as-Code</h2>
+                <p>Your schema semantics, version-controlled and API-accessible.</p>
+                <div class="code-section">
+                    <h3>payment.context.json</h3>
+                    <div class="code-block"><span class="comment">// Semantic layer for your proto</span>
 {
   <span class="key">"@context"</span>: <span class="string">"https://protobuf.ai/ontology/v1"</span>,
   <span class="key">"schema"</span>: <span class="string">"payment.proto"</span>,
@@ -800,53 +450,38 @@
     <span class="key">"Payment"</span>: {
       <span class="key">"semanticType"</span>: <span class="string">"schema:PayAction"</span>,
       <span class="key">"fields"</span>: {
-        <span class="key">"amount"</span>: {
-          <span class="key">"maps_to"</span>: <span class="string">"schema:price"</span>,
-          <span class="key">"unit"</span>: <span class="string">"cents"</span>
-        }
+        <span class="key">"amount"</span>: { <span class="key">"maps_to"</span>: <span class="string">"schema:price"</span>, <span class="key">"unit"</span>: <span class="string">"cents"</span> },
+        <span class="key">"currency"</span>: { <span class="key">"format"</span>: <span class="string">"ISO 4217"</span> }
       }
     }
-  }
-}</div>
-                    </div>
-                    <div class="code-card">
-                        <h3>Edge Cases Captured</h3>
-                        <p>Domain knowledge that lives with the schema, not in tribal knowledge.</p>
-                        <div class="code-block"><span class="comment">// payment.context.json</span>
-{
+  },
   <span class="key">"edge_cases"</span>: [
     <span class="string">"Refunds use negative amount"</span>,
-    <span class="string">"Multi-currency requires conversion at capture time"</span>,
     <span class="string">"Status transitions: PENDING → COMPLETED | FAILED"</span>
-  ],
-  <span class="key">"validation"</span>: {
-    <span class="key">"amount"</span>: <span class="string">"Must be non-zero"</span>,
-    <span class="key">"currency"</span>: <span class="string">"ISO 4217 format required"</span>
-  }
+  ]
 }</div>
-                    </div>
                 </div>
             </div>
         </section>
 
-        <section class="how-section">
+        <section>
             <div class="container">
                 <h2>How it works</h2>
                 <p>From schema to AI-native API in four steps.</p>
-                <div class="steps-grid">
-                    <div class="step-card">
+                <div class="steps">
+                    <div class="step">
                         <h3>1. Generate</h3>
                         <p>AI analyzes your .proto and creates context.json automatically</p>
                     </div>
-                    <div class="step-card">
+                    <div class="step">
                         <h3>2. Refine</h3>
                         <p>Add domain knowledge, edge cases, and relationships</p>
                     </div>
-                    <div class="step-card">
+                    <div class="step">
                         <h3>3. Publish</h3>
                         <p>Push to registry.protobuf.ai alongside your schema</p>
                     </div>
-                    <div class="step-card">
+                    <div class="step">
                         <h3>4. Discover</h3>
                         <p>AI agents find and correctly understand your API</p>
                     </div>
@@ -858,9 +493,8 @@
             <div class="container">
                 <h2>Make your APIs AI-native</h2>
                 <p>Stop letting AI guess your schema semantics. Give it the truth.</p>
-                <p>context.json turns your Protocol Buffers into a living system that every AI tool can read—so integrations stay accurate, consistent, and correct.</p>
                 <div class="cta-buttons">
-                    <a href="https://github.com/protobuf-ai/" class="btn btn-primary">View on GitHub <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
+                    <a href="https://github.com/protobuf-ai/" class="btn btn-primary">View on GitHub</a>
                     <a href="/registry.html" class="btn btn-outline">Explore the Registry</a>
                 </div>
             </div>
@@ -868,11 +502,11 @@
     </main>
 
     <footer>
-        <div class="container">
+        <div class="container-wide">
             <div class="footer-inner">
                 <div>
                     <div class="footer-brand">protobuf.ai</div>
-                    <p class="footer-tagline">The semantic layer for Protocol Buffers. Make your APIs AI-native.</p>
+                    <p class="footer-tagline">The semantic layer for Protocol Buffers.</p>
                     <p class="footer-copy">&copy; 2026 Voyant, LLC</p>
                 </div>
                 <div class="footer-links">
