@@ -3,336 +3,340 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Building Microservices? Start with the Schema | protobuf.ai Blog</title>
-    <meta name="description" content="Why schema-first development with Protocol Buffers is the secret to successful microservices architecture, and how AI makes it practical.">    
-    <!-- Analytics Tracker -->
-    <script>
-    (function(ss,ex){
-        window.ldfdr=window.ldfdr||function(){(ldfdr._q=ldfdr._q||[]).push([].slice.call(arguments));};
-        (function(d,s){
-            fs=d.getElementsByTagName(s)[0];
-            function ce(src){
-                var cs=d.createElement(s);
-                cs.src=src;
-                cs.async=1;
-                fs.parentNode.insertBefore(cs,fs);
-            };
-            ce('https://sc.lfeeder.com/lftracker_v1_'+ss+(ex?'_'+ex:'')+'.js');
-        })(document,'script');
-    })('YEgkB8lDBD18ep3Z');
-    </script>
+    <title>Building Microservices? Start with the Schema — protobuf.ai</title>
+    <meta name="description" content="Why schema-first development with Protocol Buffers is the secret to successful microservices architecture, and how AI makes it practical.">
 
-    
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+
     <style>
-        * { box-sizing: border-box; }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --background: #f8fafc;
+            --foreground: #0f172a;
+            --primary: #b45309;
+            --primary-light: #d97706;
+            --primary-dark: #92400e;
+            --muted: #64748b;
+            --muted-light: #94a3b8;
+            --border: #e2e8f0;
+            --card: #ffffff;
+        }
+
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #000000;
-            color: #ffffff;
-            margin: 0;
+            font-family: 'Source Serif 4', ui-serif, Georgia, 'Times New Roman', serif;
             line-height: 1.8;
+            color: var(--foreground);
+            background: var(--background);
+            -webkit-font-smoothing: antialiased;
         }
-        
-        /* Background effects */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 20% 50%, rgba(120, 50, 255, 0.08) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 1;
-        }
-        
-        .page-wrapper {
-            position: relative;
-            z-index: 10;
-            min-height: 100vh;
-        }
-        
-        /* Navigation */
-        .blog-nav {
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 24px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
+
         .container {
-            max-width: 800px;
+            max-width: 720px;
             margin: 0 auto;
-            padding: 0 2rem;
+            padding: 0 1.5rem;
         }
-        
-        .nav-wrapper {
+
+        .container-wide {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        a { color: var(--primary); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* Nav */
+        nav {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-inner {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .nav-brand {
-            font-size: 1.75rem;
+            font-size: 1.25rem;
             font-weight: 700;
-            color: #ffffff;
+            color: var(--primary);
             text-decoration: none;
-            font-family: 'Space Grotesk', sans-serif;
         }
-        
+
         .nav-links {
             display: flex;
             gap: 2rem;
+            list-style: none;
         }
-        
+
         .nav-links a {
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            transition: color 0.3s;
+            color: var(--muted);
+            font-size: 0.9375rem;
         }
-        
+
         .nav-links a:hover {
-            color: #ffffff;
+            color: var(--foreground);
+            text-decoration: none;
         }
-        
-        /* Article */
+
+        /* Article Header */
         .article-header {
-            padding: 4rem 0;
-            text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 4rem 0 3rem;
+            border-bottom: 1px solid var(--border);
         }
-        
-        .article-title {
-            font-size: 3rem;
-            font-weight: 700;
-            margin: 0 0 1rem 0;
-            font-family: 'Space Grotesk', sans-serif;
-            letter-spacing: -0.02em;
-        }
-        
+
         .article-meta {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 2rem;
-            color: rgba(255, 255, 255, 0.6);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
             font-size: 0.875rem;
+            color: var(--muted);
         }
-        
+
+        .article-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .lead {
+            font-size: 1.25rem;
+            color: var(--foreground);
+            line-height: 1.7;
+        }
+
+        /* Article Content */
         .article-content {
-            padding: 4rem 0;
-            font-size: 1.125rem;
-            line-height: 1.8;
+            padding: 3rem 0;
         }
-        
+
         .article-content h2 {
-            font-size: 2rem;
-            font-weight: 600;
-            margin: 3rem 0 1rem 0;
-            font-family: 'Space Grotesk', sans-serif;
-        }
-        
-        .article-content h3 {
             font-size: 1.5rem;
+            font-weight: 700;
+            margin: 2.5rem 0 1rem;
+            color: var(--primary);
+        }
+
+        .article-content h3 {
+            font-size: 1.25rem;
             font-weight: 600;
-            margin: 2rem 0 1rem 0;
-            font-family: 'Space Grotesk', sans-serif;
+            margin: 2rem 0 0.75rem;
+            color: var(--foreground);
         }
-        
+
+        .article-content h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.5rem;
+            color: var(--foreground);
+        }
+
         .article-content p {
-            margin: 0 0 1.5rem 0;
-            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1.5rem;
+            color: var(--foreground);
+            font-size: 1.0625rem;
         }
-        
-        .article-content code {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 0.2rem 0.4rem;
-            border-radius: 4px;
+
+        .article-content ul, .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-content strong {
+            font-weight: 600;
+        }
+
+        code {
             font-family: 'JetBrains Mono', monospace;
+            background: var(--border);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
             font-size: 0.9em;
         }
-        
-        .article-content pre {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
+
+        pre {
+            background: #1e293b;
+            border-radius: 0.5rem;
             padding: 1.5rem;
             overflow-x: auto;
             margin: 2rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8125rem;
+            line-height: 1.6;
+            color: #e2e8f0;
         }
-        
-        .article-content pre code {
+
+        pre code {
             background: none;
             padding: 0;
-            font-size: 0.875rem;
+            color: inherit;
         }
-        
-        .highlight-box {
-            background: rgba(120, 80, 255, 0.1);
-            border: 1px solid rgba(120, 80, 255, 0.3);
-            border-radius: 8px;
+
+        blockquote, .highlight-box {
+            margin: 2rem 0;
             padding: 1.5rem;
-            margin: 2rem 0;
+            border-left: 4px solid var(--primary);
+            background: var(--card);
+            border-radius: 0 0.5rem 0.5rem 0;
         }
-        
-        .architecture-diagram {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 2rem;
-            margin: 2rem 0;
-            text-align: center;
-            font-family: 'JetBrains Mono', monospace;
+
+        blockquote p:last-child, .highlight-box p:last-child {
+            margin-bottom: 0;
         }
-        
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin: 2rem 0;
+
+        .highlight-box h3 {
+            margin-top: 0;
+            color: var(--primary-dark);
         }
-        
-        .comparison-item {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 1.5rem;
-        }
-        
-        .comparison-item h4 {
-            margin: 0 0 1rem 0;
-            color: #7850ff;
-        }
-        
+
+        /* CTA Box */
         .cta-section {
-            background: rgba(120, 50, 255, 0.05);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 4rem 0;
+            background: var(--primary);
+            padding: 2.5rem;
+            border-radius: 0.5rem;
             text-align: center;
-            margin-top: 4rem;
+            margin: 3rem 0;
         }
-        
+
         .cta-section h2 {
-            font-size: 2rem;
-            margin: 0 0 1rem 0;
-        }
-        
-        .cta-section .btn {
-            display: inline-block;
-            padding: 1rem 2.5rem;
-            background: linear-gradient(135deg, #7850ff 0%, #ff5078 100%);
             color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 500;
-            margin-top: 1rem;
-            transition: transform 0.3s;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
         }
-        
-        .cta-section .btn:hover {
-            transform: translateY(-2px);
-        }
-        
-        .article-content ul {
-            margin: 0 0 1.5rem 0;
-            padding-left: 2rem;
-        }
-        
-        .article-content li {
-            margin: 0.5rem 0;
+
+        .cta-section p {
             color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1.5rem;
         }
-        
-        .workflow-step {
-            display: flex;
-            align-items: flex-start;
-            margin: 1.5rem 0;
-        }
-        
-        .workflow-number {
-            background: #7850ff;
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
+
+        .btn {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-right: 1rem;
-            flex-shrink: 0;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.15s;
+        }
+
+        .btn-white {
+            background: white;
+            color: var(--primary-dark);
+        }
+
+        .btn-white:hover {
+            background: var(--background);
+            text-decoration: none;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem 0;
+            margin-top: 2rem;
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .footer-tagline {
+            color: var(--muted);
+            font-size: 0.9375rem;
+            margin-top: 0.5rem;
+        }
+
+        .footer-copy {
+            font-size: 0.8125rem;
+            color: var(--muted-light);
+            margin-top: 0.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--muted);
+            font-size: 0.9375rem;
+        }
+
+        @media (max-width: 768px) {
+            .article-header h1 { font-size: 2rem; }
+            .nav-links { gap: 1rem; }
         }
     </style>
-    <!-- VoiceForge Target Graph Tracking -->
-    <script src="/voiceforge-tracking.js"></script>
 </head>
 <body>
-    <div class="page-wrapper">
-        <nav class="blog-nav">
-            <div class="container">
-                <div class="nav-wrapper">
-                    <a href="/" class="nav-brand">protobuf.ai</a>
-                    <div class="nav-links">
-                        <a href="/">Home</a>
-                        <a href="/blog">Blog</a>
-                    </div>
-                </div>
+    <nav>
+        <div class="container-wide">
+            <div class="nav-inner">
+                <a href="/" class="nav-brand">protobuf.ai</a>
+                <ul class="nav-links">
+                    <li><a href="/registry.html">Registry</a></li>
+                    <li><a href="/blog/">Blog</a></li>
+                    <li><a href="https://github.com/protobuf-ai/">GitHub</a></li>
+                </ul>
             </div>
-        </nav>
+        </div>
+    </nav>
 
-        <article>
-            <header class="article-header">
-                <div class="container">
-                    <h1 class="article-title">Building Microservices? Start with the Schema</h1>
-                    <div class="article-meta">
-                        <span>By Andrew Brown</span>
-                        <span>•</span>
-                        <span>January 22, 2025</span>
-                        <span>•</span>
-                        <span>5 min read</span>
-                    </div>
+    <article>
+        <header class="article-header">
+            <div class="container">
+                <div class="article-meta">
+                    <span>January 22, 2025</span>
+                    <span>5 min read</span>
                 </div>
-            </header>
+                <h1>Building Microservices? Start with the Schema</h1>
+            </div>
+        </header>
 
-            <div class="article-content">
-                <div class="container">
-                    <p>Here's a controversial take: most microservices fail not because of Kubernetes complexity or service mesh configuration, but because teams skip the most critical step – <strong>defining their contracts first</strong>.</p>
+        <div class="article-content">
+            <div class="container">
+                <p>Here's a controversial take: most microservices fail not because of Kubernetes complexity or service mesh configuration, but because teams skip the most critical step - <strong>defining their contracts first</strong>.</p>
 
-                    <p>After watching dozens of microservices architectures evolve (and sometimes devolve), I've noticed a pattern. The successful ones all share one trait: they started with schemas, not code.</p>
+                <p>After watching dozens of microservices architectures evolve (and sometimes devolve), I've noticed a pattern. The successful ones all share one trait: they started with schemas, not code.</p>
 
-                    <h2>The Code-First Trap</h2>
+                <h2>The Code-First Trap</h2>
 
-                    <p>Let's be honest about how most microservices actually get built:</p>
+                <p>Let's be honest about how most microservices actually get built:</p>
 
-                    <div class="workflow-step">
-                        <div class="workflow-number">1</div>
-                        <div>Team builds a REST endpoint in their favorite framework</div>
-                    </div>
-                    <div class="workflow-step">
-                        <div class="workflow-number">2</div>
-                        <div>Another team needs the data, integration happens via Slack messages</div>
-                    </div>
-                    <div class="workflow-step">
-                        <div class="workflow-number">3</div>
-                        <div>Documentation (if any) lives in a Wiki that's 6 months out of date</div>
-                    </div>
-                    <div class="workflow-step">
-                        <div class="workflow-number">4</div>
-                        <div>Breaking changes discovered in production</div>
-                    </div>
+                <ol>
+                    <li>Team builds a REST endpoint in their favorite framework</li>
+                    <li>Another team needs the data, integration happens via Slack messages</li>
+                    <li>Documentation (if any) lives in a Wiki that's 6 months out of date</li>
+                    <li>Breaking changes discovered in production</li>
+                </ol>
 
-                    <p>Sound familiar? This is code-first development, and it's killing your velocity. Every integration becomes a negotiation. Every change is a risk.</p>
+                <p>Sound familiar? This is code-first development, and it's killing your velocity. Every integration becomes a negotiation. Every change is a risk.</p>
 
-                    <h2>Enter Schema-First Development</h2>
+                <h2>Enter Schema-First Development</h2>
 
-                    <p>Schema-first flips the script. You define your API contract before writing a single line of implementation code. With Protocol Buffers, this looks like:</p>
+                <p>Schema-first flips the script. You define your API contract before writing a single line of implementation code. With Protocol Buffers, this looks like:</p>
 
-                    <pre><code>syntax = "proto3";
+                <pre><code>syntax = "proto3";
 
 package inventory.v1;
 
@@ -358,63 +362,58 @@ message StockLevel {
   int32 total = 3;
 }</code></pre>
 
-                    <p>This schema becomes your single source of truth. Every team can see exactly what the inventory service provides and requires. No guesswork, no Slack archaeology.</p>
+                <p>This schema becomes your single source of truth. Every team can see exactly what the inventory service provides and requires. No guesswork, no Slack archaeology.</p>
 
-                    <h2>Why This Changes Everything</h2>
+                <h2>Why This Changes Everything</h2>
 
-                    <div class="comparison-grid">
-                        <div class="comparison-item">
-                            <h4>Code-First Problems</h4>
-                            <ul>
-                                <li>APIs drift from documentation</li>
-                                <li>Integration requires coordination</li>
-                                <li>Breaking changes slip through</li>
-                                <li>Each language reimplements DTOs</li>
-                                <li>No automated compatibility checks</li>
-                            </ul>
-                        </div>
-                        <div class="comparison-item">
-                            <h4>Schema-First Benefits</h4>
-                            <ul>
-                                <li>Contract is the documentation</li>
-                                <li>Teams work independently</li>
-                                <li>Breaking changes caught at build time</li>
-                                <li>Code generation for all languages</li>
-                                <li>Automated compatibility validation</li>
-                            </ul>
-                        </div>
-                    </div>
+                <h4>Code-First Problems</h4>
+                <ul>
+                    <li>APIs drift from documentation</li>
+                    <li>Integration requires coordination</li>
+                    <li>Breaking changes slip through</li>
+                    <li>Each language reimplements DTOs</li>
+                    <li>No automated compatibility checks</li>
+                </ul>
 
-                    <h2>The Microservices Workflow That Actually Works</h2>
+                <h4>Schema-First Benefits</h4>
+                <ul>
+                    <li>Contract is the documentation</li>
+                    <li>Teams work independently</li>
+                    <li>Breaking changes caught at build time</li>
+                    <li>Code generation for all languages</li>
+                    <li>Automated compatibility validation</li>
+                </ul>
 
-                    <p>Here's how successful teams build microservices with schema-first development:</p>
+                <h2>The Microservices Workflow That Actually Works</h2>
 
-                    <div class="highlight-box">
-                        <h3>1. Design Phase: Define Contracts Together</h3>
-                        <p>Product, frontend, and backend teams collaborate on the API contract. With AI tools, you can generate initial schemas from requirements in minutes.</p>
-                        <pre><code>$ protobuf-ai create "order processing service with payment integration"</code></pre>
-                    </div>
+                <p>Here's how successful teams build microservices with schema-first development:</p>
 
-                    <div class="highlight-box">
-                        <h3>2. Review Phase: Validate Before Implementation</h3>
-                        <p>Teams review the generated schema, suggest improvements, and validate it meets all requirements. This is where you catch design issues early.</p>
-                    </div>
+                <div class="highlight-box">
+                    <h3>1. Design Phase: Define Contracts Together</h3>
+                    <p>Product, frontend, and backend teams collaborate on the API contract. With AI tools, you can generate initial schemas from requirements in minutes.</p>
+                    <pre><code>$ protobuf-ai create "order processing service with payment integration"</code></pre>
+                </div>
 
-                    <div class="highlight-box">
-                        <h3>3. Development Phase: Parallel Implementation</h3>
-                        <p>With schemas locked in, teams work independently. Frontend generates TypeScript types, backend generates Go structs, mobile generates Swift classes – all from the same source.</p>
-                    </div>
+                <div class="highlight-box">
+                    <h3>2. Review Phase: Validate Before Implementation</h3>
+                    <p>Teams review the generated schema, suggest improvements, and validate it meets all requirements. This is where you catch design issues early.</p>
+                </div>
 
-                    <div class="highlight-box">
-                        <h3>4. Evolution Phase: Safe Changes</h3>
-                        <p>Need to add a field? The schema evolution rules are clear and tooling enforces them. Breaking changes are caught before they break anything.</p>
-                    </div>
+                <div class="highlight-box">
+                    <h3>3. Development Phase: Parallel Implementation</h3>
+                    <p>With schemas locked in, teams work independently. Frontend generates TypeScript types, backend generates Go structs, mobile generates Swift classes - all from the same source.</p>
+                </div>
 
-                    <h2>Real World: Payment Processing Microservices</h2>
+                <div class="highlight-box">
+                    <h3>4. Evolution Phase: Safe Changes</h3>
+                    <p>Need to add a field? The schema evolution rules are clear and tooling enforces them. Breaking changes are caught before they break anything.</p>
+                </div>
 
-                    <p>Let's see schema-first in action with a payment processing system:</p>
+                <h2>Real World: Payment Processing Microservices</h2>
 
-                    <pre><code>syntax = "proto3";
+                <p>Let's see schema-first in action with a payment processing system:</p>
+
+                <pre><code>syntax = "proto3";
 
 package payments.v1;
 
@@ -426,7 +425,7 @@ service PaymentService {
   rpc ProcessPayment(ProcessPaymentRequest) returns (ProcessPaymentResponse);
   rpc GetPaymentStatus(GetPaymentStatusRequest) returns (Payment);
   rpc RefundPayment(RefundPaymentRequest) returns (Payment);
-  
+
   // Streaming API for real-time updates
   rpc WatchPaymentStatus(WatchPaymentStatusRequest) returns (stream Payment);
 }
@@ -440,7 +439,7 @@ message Payment {
   PaymentStatus status = 5;
   google.protobuf.Timestamp created_at = 6;
   google.protobuf.Timestamp updated_at = 7;
-  
+
   // Extensible metadata
   map<string, string> metadata = 10;
 }
@@ -459,12 +458,12 @@ enum PaymentStatus {
   PAYMENT_STATUS_REFUNDED = 5;
 }</code></pre>
 
-                    <p>This schema serves as the foundation for your entire payment system. Every service that interacts with payments uses these definitions. When you need to add fraud detection:</p>
+                <p>This schema serves as the foundation for your entire payment system. Every service that interacts with payments uses these definitions. When you need to add fraud detection:</p>
 
-                    <pre><code>// Easy to extend without breaking existing code
+                <pre><code>// Easy to extend without breaking existing code
 message Payment {
   // ... existing fields ...
-  
+
   // New fraud detection fields
   FraudCheck fraud_check = 11;
 }
@@ -475,105 +474,82 @@ message FraudCheck {
   bool requires_review = 3;
 }</code></pre>
 
-                    <h2>The AI Advantage in Schema-First</h2>
+                <h2>The AI Advantage in Schema-First</h2>
 
-                    <p>This is where AI becomes a game-changer. Instead of teams spending days debating field names and message structures, AI can:</p>
+                <p>This is where AI becomes a game-changer. Instead of teams spending days debating field names and message structures, AI can:</p>
 
-                    <ul>
-                        <li><strong>Generate initial schemas from requirements</strong> – "I need a service for user authentication with OAuth support"</li>
-                        <li><strong>Suggest optimal patterns</strong> – AI knows to use Well-Known Types, proper versioning, and field reservations</li>
-                        <li><strong>Detect anti-patterns</strong> – "This looks like a god object, consider splitting into smaller messages"</li>
-                        <li><strong>Generate service compositions</strong> – Show how services should interact based on the schemas</li>
-                    </ul>
+                <ul>
+                    <li><strong>Generate initial schemas from requirements</strong> - "I need a service for user authentication with OAuth support"</li>
+                    <li><strong>Suggest optimal patterns</strong> - AI knows to use Well-Known Types, proper versioning, and field reservations</li>
+                    <li><strong>Detect anti-patterns</strong> - "This looks like a god object, consider splitting into smaller messages"</li>
+                    <li><strong>Generate service compositions</strong> - Show how services should interact based on the schemas</li>
+                </ul>
 
-                    <div class="architecture-diagram">
-                        <pre>
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│   Frontend      │     │   Mobile App    │     │   Partner API   │
-└────────┬────────┘     └────────┬────────┘     └────────┬────────┘
-         │                       │                         │
-         └───────────────────────┴─────────────────────────┘
-                                 │
-                        ┌────────┴────────┐
-                        │  API Gateway    │
-                        │  (proto-aware)  │
-                        └────────┬────────┘
-                                 │
-         ┌───────────────────────┼───────────────────────┐
-         │                       │                       │
-┌────────┴────────┐     ┌────────┴────────┐    ┌────────┴────────┐
-│ Order Service   │     │ Payment Service │    │Inventory Service│
-│ orders.v1.proto │     │payments.v1.proto│    │inventory.v1.proto│
-└─────────────────┘     └─────────────────┘    └─────────────────┘
+                <h2>Common Objections (And Why They're Wrong)</h2>
 
-All services share common proto definitions and use generated code
-        </pre>
-                    </div>
+                <p><strong>"But schemas are restrictive!"</strong><br>
+                They're not restrictive, they're explicit. You can still be flexible - Protocol Buffers support optional fields, maps, and extensions. The difference is your flexibility is intentional, not accidental.</p>
 
-                    <h2>Common Objections (And Why They're Wrong)</h2>
+                <p><strong>"We need to move fast!"</strong><br>
+                Schema-first is how you move fast safely. Spending 30 minutes on schema design saves days of integration debugging. AI makes this even faster - generate schemas in seconds, not hours.</p>
 
-                    <p><strong>"But schemas are restrictive!"</strong><br>
-                    They're not restrictive, they're explicit. You can still be flexible – Protocol Buffers support optional fields, maps, and extensions. The difference is your flexibility is intentional, not accidental.</p>
+                <p><strong>"Our team doesn't know Protocol Buffers!"</strong><br>
+                They don't need to be experts. AI handles the syntax, best practices, and patterns. Your team focuses on the business logic.</p>
 
-                    <p><strong>"We need to move fast!"</strong><br>
-                    Schema-first is how you move fast safely. Spending 30 minutes on schema design saves days of integration debugging. AI makes this even faster – generate schemas in seconds, not hours.</p>
+                <h2>The Schema-First Principles</h2>
 
-                    <p><strong>"Our team doesn't know Protocol Buffers!"</strong><br>
-                    They don't need to be experts. AI handles the syntax, best practices, and patterns. Your team focuses on the business logic.</p>
+                <p>If you take away nothing else, remember these principles:</p>
 
-                    <h2>The Schema-First Principles</h2>
+                <ol>
+                    <li><strong>Contract Before Code</strong> - Always define your API contract before implementation</li>
+                    <li><strong>Single Source of Truth</strong> - The schema is the documentation, not a Wiki page</li>
+                    <li><strong>Generate, Don't Write</strong> - Use code generation for all DTOs and clients</li>
+                    <li><strong>Version From Day One</strong> - Include versioning in your package structure</li>
+                    <li><strong>Evolve Safely</strong> - Use schema evolution rules and tooling to prevent breaks</li>
+                </ol>
 
-                    <p>If you take away nothing else, remember these principles:</p>
+                <h2>Getting Started Tomorrow</h2>
 
-                    <ol>
-                        <li><strong>Contract Before Code</strong> – Always define your API contract before implementation</li>
-                        <li><strong>Single Source of Truth</strong> – The schema is the documentation, not a Wiki page</li>
-                        <li><strong>Generate, Don't Write</strong> – Use code generation for all DTOs and clients</li>
-                        <li><strong>Version From Day One</strong> – Include versioning in your package structure</li>
-                        <li><strong>Evolve Safely</strong> – Use schema evolution rules and tooling to prevent breaks</li>
-                    </ol>
+                <p>Ready to try schema-first development? Here's your action plan:</p>
 
-                    <h2>Getting Started Tomorrow</h2>
+                <ol>
+                    <li><strong>Pick one service</strong> - Start with a new service or one that needs refactoring</li>
+                    <li><strong>Define the schema</strong> - Use AI to generate initial proto files from requirements</li>
+                    <li><strong>Review with consumers</strong> - Get feedback from teams that will use your service</li>
+                    <li><strong>Generate code</strong> - Use protoc or Buf to generate client libraries</li>
+                    <li><strong>Implement and iterate</strong> - Build your service with confidence in the contract</li>
+                </ol>
 
-                    <p>Ready to try schema-first development? Here's your action plan:</p>
+                <p>The teams that succeed with microservices aren't the ones with the best orchestration platforms or the most sophisticated service meshes. They're the ones that get their contracts right from the start.</p>
 
-                    <div class="workflow-step">
-                        <div class="workflow-number">1</div>
-                        <div><strong>Pick one service</strong> – Start with a new service or one that needs refactoring</div>
-                    </div>
-                    <div class="workflow-step">
-                        <div class="workflow-number">2</div>
-                        <div><strong>Define the schema</strong> – Use AI to generate initial proto files from requirements</div>
-                    </div>
-                    <div class="workflow-step">
-                        <div class="workflow-number">3</div>
-                        <div><strong>Review with consumers</strong> – Get feedback from teams that will use your service</div>
-                    </div>
-                    <div class="workflow-step">
-                        <div class="workflow-number">4</div>
-                        <div><strong>Generate code</strong> – Use protoc or Buf to generate client libraries</div>
-                    </div>
-                    <div class="workflow-step">
-                        <div class="workflow-number">5</div>
-                        <div><strong>Implement and iterate</strong> – Build your service with confidence in the contract</div>
-                    </div>
+                <p>Schema-first isn't just a nice-to-have. In the world of microservices, it's the difference between a system that scales and one that becomes unmaintainable spaghetti.</p>
 
-                    <p>The teams that succeed with microservices aren't the ones with the best orchestration platforms or the most sophisticated service meshes. They're the ones that get their contracts right from the start.</p>
+                <p><em>Ready to build better microservices? Start with better schemas. Try protobuf.ai to generate service contracts from your requirements in seconds.</em></p>
 
-                    <p>Schema-first isn't just a nice-to-have. In the world of microservices, it's the difference between a system that scales and one that becomes unmaintainable spaghetti.</p>
-
-                    <p><em>Ready to build better microservices? Start with better schemas. Try protobuf.ai to generate service contracts from your requirements in seconds.</em></p>
+                <div class="cta-section">
+                    <h2>Design Better Microservices</h2>
+                    <p>Generate service contracts that scale with AI assistance</p>
+                    <a href="/#waitlist-form" class="btn btn-white">Join Waitlist</a>
                 </div>
             </div>
-        </article>
+        </div>
+    </article>
 
-        <section class="cta-section">
-            <div class="container">
-                <h2>Design Better Microservices</h2>
-                <p>Generate service contracts that scale with AI assistance</p>
-                <a href="/#waitlist-form" class="btn">Join Waitlist</a>
+    <footer>
+        <div class="container-wide">
+            <div class="footer-inner">
+                <div>
+                    <div class="footer-brand">protobuf.ai</div>
+                    <p class="footer-tagline">The semantic layer for Protocol Buffers.</p>
+                    <p class="footer-copy">&copy; 2026 Voyant, LLC</p>
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/protobuf-ai/">GitHub</a>
+                    <a href="/registry.html">Registry</a>
+                    <a href="/blog/">Blog</a>
+                </div>
             </div>
-        </section>
-    </div>
+        </div>
+    </footer>
 </body>
 </html>

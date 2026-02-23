@@ -3,416 +3,411 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Hidden Cost of Bad API Design | protobuf.ai Blog</title>
-    <meta name="description" content="Bad API design compounds like technical debt on steroids. Here's what poor Protocol Buffer schemas really cost, and how to avoid the most expensive mistakes.">    
-    <!-- Analytics Tracker -->
-    <script>
-    (function(ss,ex){
-        window.ldfdr=window.ldfdr||function(){(ldfdr._q=ldfdr._q||[]).push([].slice.call(arguments));};
-        (function(d,s){
-            fs=d.getElementsByTagName(s)[0];
-            function ce(src){
-                var cs=d.createElement(s);
-                cs.src=src;
-                cs.async=1;
-                fs.parentNode.insertBefore(cs,fs);
-            };
-            ce('https://sc.lfeeder.com/lftracker_v1_'+ss+(ex?'_'+ex:'')+'.js');
-        })(document,'script');
-    })('YEgkB8lDBD18ep3Z');
-    </script>
+    <title>The Hidden Cost of Bad API Design — protobuf.ai</title>
+    <meta name="description" content="Bad API design compounds like technical debt on steroids. Here's what poor Protocol Buffer schemas really cost, and how to avoid the most expensive mistakes.">
 
-    
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+
     <style>
-        * { box-sizing: border-box; }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --background: #f8fafc;
+            --foreground: #0f172a;
+            --primary: #b45309;
+            --primary-light: #d97706;
+            --primary-dark: #92400e;
+            --muted: #64748b;
+            --muted-light: #94a3b8;
+            --border: #e2e8f0;
+            --card: #ffffff;
+        }
+
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #000000;
-            color: #ffffff;
-            margin: 0;
+            font-family: 'Source Serif 4', ui-serif, Georgia, 'Times New Roman', serif;
             line-height: 1.8;
+            color: var(--foreground);
+            background: var(--background);
+            -webkit-font-smoothing: antialiased;
         }
-        
-        /* Background effects */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 20% 50%, rgba(120, 50, 255, 0.08) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 1;
-        }
-        
-        .page-wrapper {
-            position: relative;
-            z-index: 10;
-            min-height: 100vh;
-        }
-        
-        /* Navigation */
-        .blog-nav {
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 24px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
+
         .container {
-            max-width: 800px;
+            max-width: 720px;
             margin: 0 auto;
-            padding: 0 2rem;
+            padding: 0 1.5rem;
         }
-        
-        .nav-wrapper {
+
+        .container-wide {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        a { color: var(--primary); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* Nav */
+        nav {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-inner {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .nav-brand {
-            font-size: 1.75rem;
+            font-size: 1.25rem;
             font-weight: 700;
-            color: #ffffff;
+            color: var(--primary);
             text-decoration: none;
-            font-family: 'Space Grotesk', sans-serif;
         }
-        
+
         .nav-links {
             display: flex;
             gap: 2rem;
+            list-style: none;
         }
-        
+
         .nav-links a {
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            transition: color 0.3s;
+            color: var(--muted);
+            font-size: 0.9375rem;
         }
-        
+
         .nav-links a:hover {
-            color: #ffffff;
+            color: var(--foreground);
+            text-decoration: none;
         }
-        
-        /* Article */
+
+        /* Article Header */
         .article-header {
-            padding: 4rem 0;
-            text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 4rem 0 3rem;
+            border-bottom: 1px solid var(--border);
         }
-        
-        .article-title {
-            font-size: 3rem;
-            font-weight: 700;
-            margin: 0 0 1rem 0;
-            font-family: 'Space Grotesk', sans-serif;
-            letter-spacing: -0.02em;
-        }
-        
+
         .article-meta {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 2rem;
-            color: rgba(255, 255, 255, 0.6);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
             font-size: 0.875rem;
+            color: var(--muted);
         }
-        
+
+        .article-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .lead {
+            font-size: 1.25rem;
+            color: var(--foreground);
+            line-height: 1.7;
+        }
+
+        /* Article Content */
         .article-content {
-            padding: 4rem 0;
-            font-size: 1.125rem;
-            line-height: 1.8;
+            padding: 3rem 0;
         }
-        
+
         .article-content h2 {
-            font-size: 2rem;
-            font-weight: 600;
-            margin: 3rem 0 1rem 0;
-            font-family: 'Space Grotesk', sans-serif;
-        }
-        
-        .article-content h3 {
             font-size: 1.5rem;
+            font-weight: 700;
+            margin: 2.5rem 0 1rem;
+            color: var(--primary);
+        }
+
+        .article-content h3 {
+            font-size: 1.25rem;
             font-weight: 600;
-            margin: 2rem 0 1rem 0;
-            font-family: 'Space Grotesk', sans-serif;
+            margin: 2rem 0 0.75rem;
+            color: var(--foreground);
         }
-        
+
         .article-content p {
-            margin: 0 0 1.5rem 0;
-            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1.5rem;
+            color: var(--foreground);
+            font-size: 1.0625rem;
         }
-        
-        .article-content code {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 0.2rem 0.4rem;
-            border-radius: 4px;
+
+        .article-content ul, .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-content strong {
+            font-weight: 600;
+        }
+
+        code {
             font-family: 'JetBrains Mono', monospace;
+            background: var(--border);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
             font-size: 0.9em;
         }
-        
-        .article-content pre {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
+
+        pre {
+            background: #1e293b;
+            border-radius: 0.5rem;
             padding: 1.5rem;
             overflow-x: auto;
             margin: 2rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8125rem;
+            line-height: 1.6;
+            color: #e2e8f0;
         }
-        
-        .article-content pre code {
+
+        pre code {
             background: none;
             padding: 0;
-            font-size: 0.875rem;
+            color: inherit;
         }
-        
-        .highlight-box {
-            background: rgba(120, 80, 255, 0.1);
-            border: 1px solid rgba(120, 80, 255, 0.3);
-            border-radius: 8px;
-            padding: 1.5rem;
+
+        blockquote, .highlight-box {
             margin: 2rem 0;
-        }
-        
-        .cost-box {
-            background: rgba(255, 80, 120, 0.1);
-            border: 1px solid rgba(255, 80, 120, 0.3);
-            border-radius: 8px;
             padding: 1.5rem;
-            margin: 2rem 0;
+            border-left: 4px solid var(--primary);
+            background: var(--card);
+            border-radius: 0 0.5rem 0.5rem 0;
         }
-        
-        .cost-calculation {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            font-family: 'JetBrains Mono', monospace;
+
+        blockquote p:last-child, .highlight-box p:last-child {
+            margin-bottom: 0;
         }
-        
-        .cost-item {
+
+        .highlight-box h3 {
+            margin-top: 0;
+            color: var(--primary-dark);
+        }
+
+        /* CTA Box */
+        .cta-section {
+            background: var(--primary);
+            padding: 2.5rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .cta-section h2 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .cta-section p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.15s;
+        }
+
+        .btn-white {
+            background: white;
+            color: var(--primary-dark);
+        }
+
+        .btn-white:hover {
+            background: var(--background);
+            text-decoration: none;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem 0;
+            margin-top: 2rem;
+        }
+
+        .footer-inner {
             display: flex;
             justify-content: space-between;
-            margin: 0.5rem 0;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 2rem;
         }
-        
-        .cost-total {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #ff5078;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 2px solid rgba(255, 255, 255, 0.2);
+
+        .footer-brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
         }
-        
-        .cta-section {
-            background: rgba(120, 50, 255, 0.05);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 4rem 0;
-            text-align: center;
-            margin-top: 4rem;
+
+        .footer-tagline {
+            color: var(--muted);
+            font-size: 0.9375rem;
+            margin-top: 0.5rem;
         }
-        
-        .cta-section h2 {
-            font-size: 2rem;
-            margin: 0 0 1rem 0;
+
+        .footer-copy {
+            font-size: 0.8125rem;
+            color: var(--muted-light);
+            margin-top: 0.5rem;
         }
-        
-        .cta-section .btn {
-            display: inline-block;
-            padding: 1rem 2.5rem;
-            background: linear-gradient(135deg, #7850ff 0%, #ff5078 100%);
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 500;
-            margin-top: 1rem;
-            transition: transform 0.3s;
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
         }
-        
-        .cta-section .btn:hover {
-            transform: translateY(-2px);
+
+        .footer-links a {
+            color: var(--muted);
+            font-size: 0.9375rem;
         }
-        
-        .article-content ul {
-            margin: 0 0 1.5rem 0;
-            padding-left: 2rem;
-        }
-        
-        .article-content li {
-            margin: 0.5rem 0;
-            color: rgba(255, 255, 255, 0.9);
-        }
-        
-        .mistake-example {
-            border-left: 3px solid #ff5078;
-            padding-left: 1.5rem;
-            margin: 2rem 0;
+
+        @media (max-width: 768px) {
+            .article-header h1 { font-size: 2rem; }
+            .nav-links { gap: 1rem; }
         }
     </style>
-    <!-- VoiceForge Target Graph Tracking -->
-    <script src="/voiceforge-tracking.js"></script>
 </head>
 <body>
-    <div class="page-wrapper">
-        <nav class="blog-nav">
-            <div class="container">
-                <div class="nav-wrapper">
-                    <a href="/" class="nav-brand">protobuf.ai</a>
-                    <div class="nav-links">
-                        <a href="/">Home</a>
-                        <a href="/blog">Blog</a>
-                    </div>
-                </div>
+    <nav>
+        <div class="container-wide">
+            <div class="nav-inner">
+                <a href="/" class="nav-brand">protobuf.ai</a>
+                <ul class="nav-links">
+                    <li><a href="/registry.html">Registry</a></li>
+                    <li><a href="/blog/">Blog</a></li>
+                    <li><a href="https://github.com/protobuf-ai/">GitHub</a></li>
+                </ul>
             </div>
-        </nav>
+        </div>
+    </nav>
 
-        <article>
-            <header class="article-header">
-                <div class="container">
-                    <h1 class="article-title">The Hidden Cost of Bad API Design</h1>
-                    <div class="article-meta">
-                        <span>By Andrew Brown</span>
-                        <span>•</span>
-                        <span>January 24, 2025</span>
-                        <span>•</span>
-                        <span>6 min read</span>
-                    </div>
+    <article>
+        <header class="article-header">
+            <div class="container">
+                <div class="article-meta">
+                    <span>January 24, 2025</span>
+                    <span>6 min read</span>
                 </div>
-            </header>
+                <h1>The Hidden Cost of Bad API Design</h1>
+            </div>
+        </header>
 
-            <div class="article-content">
-                <div class="container">
-                    <p>Let me share a horror story. A fintech startup I advised had to delay their Series B by six months because they couldn't add multi-currency support. The reason? A single poor decision in their Protocol Buffer design two years earlier.</p>
+        <div class="article-content">
+            <div class="container">
+                <p>Let me share a horror story. A fintech startup I advised had to delay their Series B by six months because they couldn't add multi-currency support. The reason? A single poor decision in their Protocol Buffer design two years earlier.</p>
 
-                    <p>They stored monetary amounts as floats.</p>
+                <p>They stored monetary amounts as floats.</p>
 
-                    <pre><code>// The $10 million mistake
+                <pre><code>// The $10 million mistake
 message Transaction {
-  float amount = 1;  // 🚨 Never do this
+  float amount = 1;  // Never do this
   string currency = 2;
 }</code></pre>
 
-                    <p>This one line of code cost them millions. Here's how bad API design compounds into real money, and how to avoid the most expensive mistakes.</p>
+                <p>This one line of code cost them millions. Here's how bad API design compounds into real money, and how to avoid the most expensive mistakes.</p>
 
-                    <h2>The True Cost of API Mistakes</h2>
+                <h2>The True Cost of API Mistakes</h2>
 
-                    <p>Bad API design isn't just a technical problem – it's a business problem. Let's quantify the real costs:</p>
+                <p>Bad API design isn't just a technical problem - it's a business problem. Let's quantify the real costs:</p>
 
-                    <div class="cost-calculation">
-                        <h3>Case Study: E-commerce Platform Schema Redesign</h3>
-                        <div class="cost-item">
-                            <span>Developer time (6 engineers × 3 months)</span>
-                            <span>$450,000</span>
-                        </div>
-                        <div class="cost-item">
-                            <span>Delayed features (lost revenue)</span>
-                            <span>$2,100,000</span>
-                        </div>
-                        <div class="cost-item">
-                            <span>Customer migration support</span>
-                            <span>$180,000</span>
-                        </div>
-                        <div class="cost-item">
-                            <span>Production incidents during migration</span>
-                            <span>$340,000</span>
-                        </div>
-                        <div class="cost-item">
-                            <span>Third-party integration updates</span>
-                            <span>$90,000</span>
-                        </div>
-                        <div class="cost-total">
-                            <span>Total Cost of One Bad Schema</span>
-                            <span>$3,160,000</span>
-                        </div>
-                    </div>
+                <div class="highlight-box">
+                    <h3>Case Study: E-commerce Platform Schema Redesign</h3>
+                    <ul>
+                        <li>Developer time (6 engineers x 3 months): $450,000</li>
+                        <li>Delayed features (lost revenue): $2,100,000</li>
+                        <li>Customer migration support: $180,000</li>
+                        <li>Production incidents during migration: $340,000</li>
+                        <li>Third-party integration updates: $90,000</li>
+                    </ul>
+                    <p><strong>Total Cost of One Bad Schema: $3,160,000</strong></p>
+                </div>
 
-                    <p>And that's just the direct costs. It doesn't include lost market opportunities, damaged partner relationships, or engineer burnout.</p>
+                <p>And that's just the direct costs. It doesn't include lost market opportunities, damaged partner relationships, or engineer burnout.</p>
 
-                    <h2>The 5 Most Expensive Proto Mistakes</h2>
+                <h2>The 5 Most Expensive Proto Mistakes</h2>
 
-                    <h3>1. The Float Money Trap ($10M+ Impact)</h3>
+                <h3>1. The Float Money Trap ($10M+ Impact)</h3>
 
-                    <div class="mistake-example">
-                        <pre><code>// ❌ NEVER store money as float
+                <pre><code>// NEVER store money as float
 message Product {
   float price = 1;  // 19.99 becomes 19.989999999999998
 }
 
-// ✅ Always use integers for money
+// Always use integers for money
 message Product {
   int64 price_cents = 1;  // 1999 (representing $19.99)
   string currency_code = 2;  // "USD"
 }
 
-// ✅ Or even better, use a dedicated Money type
+// Or even better, use a dedicated Money type
 message Money {
   int64 amount_cents = 1;
   string currency_code = 2;
   int32 decimal_places = 3;  // For cryptocurrencies
 }</code></pre>
-                    </div>
 
-                    <p><strong>Real cost:</strong> One company lost $180,000 in a single day due to float rounding errors in their payment system. The fix took 3 months and cost millions in engineering time.</p>
+                <p><strong>Real cost:</strong> One company lost $180,000 in a single day due to float rounding errors in their payment system. The fix took 3 months and cost millions in engineering time.</p>
 
-                    <h3>2. The Enum Trap ($5M+ Impact)</h3>
+                <h3>2. The Enum Trap ($5M+ Impact)</h3>
 
-                    <div class="mistake-example">
-                        <pre><code>// ❌ Brittle enum that breaks clients
+                <pre><code>// Brittle enum that breaks clients
 enum UserStatus {
   ACTIVE = 0;    // 0 is default, causes confusion
   INACTIVE = 1;
   DELETED = 2;   // Oh no, we need to add SUSPENDED...
 }
 
-// ✅ Forward-compatible enum design
+// Forward-compatible enum design
 enum UserStatus {
   USER_STATUS_UNSPECIFIED = 0;  // Clear default
   USER_STATUS_ACTIVE = 1;
   USER_STATUS_INACTIVE = 2;
   USER_STATUS_SUSPENDED = 3;    // Safe to add
   USER_STATUS_DELETED = 4;
-  
+
   reserved 5 to 10;  // Reserve for future use
 }</code></pre>
-                    </div>
 
-                    <p><strong>Real cost:</strong> A SaaS platform had to maintain 3 different API versions for 18 months because they couldn't safely add new user statuses. Customer churn: 12%.</p>
+                <p><strong>Real cost:</strong> A SaaS platform had to maintain 3 different API versions for 18 months because they couldn't safely add new user statuses. Customer churn: 12%.</p>
 
-                    <h3>3. The God Object Trap ($3M+ Impact)</h3>
+                <h3>3. The God Object Trap ($3M+ Impact)</h3>
 
-                    <div class="mistake-example">
-                        <pre><code>// ❌ Everything in one message
+                <pre><code>// Everything in one message
 message User {
   string id = 1;
   string email = 2;
   string name = 3;
-  
+
   // Billing info - shouldn't be here
   string credit_card_number = 10;
   string billing_address = 11;
-  
+
   // Preferences - shouldn't be here
   bool email_notifications = 20;
   string timezone = 21;
-  
+
   // Analytics - definitely shouldn't be here
   int32 login_count = 30;
   google.protobuf.Timestamp last_login = 31;
-  
+
   // ... 50 more fields
 }
 
-// ✅ Properly separated concerns
+// Properly separated concerns
 message User {
   string id = 1;
   string email = 2;
@@ -430,14 +425,12 @@ message UserPreferences {
   NotificationSettings notifications = 2;
   string timezone = 3;
 }</code></pre>
-                    </div>
 
-                    <p><strong>Real cost:</strong> Every service that needed basic user info had to deserialize 2KB of unnecessary data. At 100M requests/day, this wasted $50,000/month in bandwidth and compute.</p>
+                <p><strong>Real cost:</strong> Every service that needed basic user info had to deserialize 2KB of unnecessary data. At 100M requests/day, this wasted $50,000/month in bandwidth and compute.</p>
 
-                    <h3>4. The Missing Versioning Trap ($8M+ Impact)</h3>
+                <h3>4. The Missing Versioning Trap ($8M+ Impact)</h3>
 
-                    <div class="mistake-example">
-                        <pre><code>// ❌ No versioning strategy
+                <pre><code>// No versioning strategy
 package myapp;
 
 service UserService {
@@ -447,7 +440,7 @@ service UserService {
 // Two years later: "We need to change User completely..."
 // Options: Break everyone or maintain forever
 
-// ✅ Versioned from day one
+// Versioned from day one
 package myapp.user.v1;
 
 service UserService {
@@ -461,152 +454,163 @@ service UserService {
   rpc GetUser(GetUserRequest) returns (User);
   // v1 and v2 can coexist during migration
 }</code></pre>
-                    </div>
 
-                    <p><strong>Real cost:</strong> A logistics company spent 18 months and $8M migrating customers because they had no API versioning. 30% of integrations broke during the transition.</p>
+                <p><strong>Real cost:</strong> A logistics company spent 18 months and $8M migrating customers because they had no API versioning. 30% of integrations broke during the transition.</p>
 
-                    <h3>5. The Timestamp String Trap ($2M+ Impact)</h3>
+                <h3>5. The Timestamp String Trap ($2M+ Impact)</h3>
 
-                    <div class="mistake-example">
-                        <pre><code>// ❌ Strings for timestamps = timezone hell
+                <pre><code>// Strings for timestamps = timezone hell
 message Event {
   string created_at = 1;  // "2025-01-24 10:30:00" - what timezone?
 }
 
-// ✅ Use proper timestamp types
+// Use proper timestamp types
 import "google/protobuf/timestamp.proto";
 
 message Event {
   google.protobuf.Timestamp created_at = 1;  // UTC, nanosecond precision
   string timezone = 2;  // Store display timezone separately if needed
 }</code></pre>
-                    </div>
 
-                    <p><strong>Real cost:</strong> An analytics platform showed incorrect data for 6 months due to timezone confusion. Customer trust lost: immeasurable. Refunds issued: $2M+.</p>
+                <p><strong>Real cost:</strong> An analytics platform showed incorrect data for 6 months due to timezone confusion. Customer trust lost: immeasurable. Refunds issued: $2M+.</p>
 
-                    <h2>The Compound Interest of Bad Design</h2>
+                <h2>The Compound Interest of Bad Design</h2>
 
-                    <p>Here's what makes API design mistakes so costly: they compound over time.</p>
+                <p>Here's what makes API design mistakes so costly: they compound over time.</p>
 
-                    <div class="cost-box">
-                        <h3>Year 1: "It's Just Technical Debt"</h3>
-                        <ul>
-                            <li>Extra 30 minutes per feature due to workarounds</li>
-                            <li>Occasional production issues</li>
-                            <li>New engineers confused by the design</li>
-                        </ul>
-                        <p><strong>Cost: ~$100,000</strong></p>
-                    </div>
-
-                    <div class="cost-box">
-                        <h3>Year 2: "We Really Should Fix This"</h3>
-                        <ul>
-                            <li>Can't implement key features without major refactoring</li>
-                            <li>Customer integrations becoming complex</li>
-                            <li>Performance degrading as workarounds stack up</li>
-                        </ul>
-                        <p><strong>Cost: ~$500,000</strong></p>
-                    </div>
-
-                    <div class="cost-box">
-                        <h3>Year 3: "Full Stop, We Must Migrate"</h3>
-                        <ul>
-                            <li>6-month migration project</li>
-                            <li>All feature development paused</li>
-                            <li>Customer churn due to instability</li>
-                            <li>Key engineers leave from frustration</li>
-                        </ul>
-                        <p><strong>Cost: ~$3,000,000+</strong></p>
-                    </div>
-
-                    <h2>The ROI of Good API Design</h2>
-
-                    <p>Now let's flip the script. What's the value of getting it right from the start?</p>
-
-                    <div class="highlight-box">
-                        <h3>Velocity Gains</h3>
-                        <p>Teams with well-designed APIs ship features 40% faster. At a 50-person engineering org, that's equivalent to hiring 20 more engineers.</p>
-                        <p><strong>Value: $3M/year</strong></p>
-                    </div>
-
-                    <div class="highlight-box">
-                        <h3>Reduced Incidents</h3>
-                        <p>Good schemas prevent entire classes of bugs. 60% fewer production incidents means happier customers and sleeping engineers.</p>
-                        <p><strong>Value: $500K/year in reduced downtime</strong></p>
-                    </div>
-
-                    <div class="highlight-box">
-                        <h3>Partner Integration Speed</h3>
-                        <p>Clean APIs mean partners integrate in days, not months. Faster partnerships = faster growth.</p>
-                        <p><strong>Value: $1-5M in accelerated revenue</strong></p>
-                    </div>
-
-                    <h2>How AI Changes the Economics</h2>
-
-                    <p>This is where AI-assisted design becomes a game-changer. Consider the traditional process:</p>
-
+                <div class="highlight-box">
+                    <h3>Year 1: "It's Just Technical Debt"</h3>
                     <ul>
-                        <li>Senior engineer spends 2 days designing schema: $2,000</li>
-                        <li>Team review and iteration: 3 days: $6,000</li>
-                        <li>Still misses edge cases that cost millions later</li>
+                        <li>Extra 30 minutes per feature due to workarounds</li>
+                        <li>Occasional production issues</li>
+                        <li>New engineers confused by the design</li>
                     </ul>
+                    <p><strong>Cost: ~$100,000</strong></p>
+                </div>
 
-                    <p>With AI assistance:</p>
+                <div class="highlight-box">
+                    <h3>Year 2: "We Really Should Fix This"</h3>
                     <ul>
-                        <li>Generate initial schema in minutes</li>
-                        <li>AI flags all the expensive mistakes upfront</li>
-                        <li>Suggests patterns from analyzing thousands of successful APIs</li>
-                        <li>Total time: 2 hours instead of 5 days</li>
+                        <li>Can't implement key features without major refactoring</li>
+                        <li>Customer integrations becoming complex</li>
+                        <li>Performance degrading as workarounds stack up</li>
                     </ul>
+                    <p><strong>Cost: ~$500,000</strong></p>
+                </div>
 
-                    <p>The AI doesn't just save time – it prevents the multi-million dollar mistakes by encoding best practices into every schema.</p>
-
-                    <h2>The Checklist: Is Your API a Ticking Time Bomb?</h2>
-
-                    <p>Run through this checklist. Each "yes" is a future migration waiting to happen:</p>
-
+                <div class="highlight-box">
+                    <h3>Year 3: "Full Stop, We Must Migrate"</h3>
                     <ul>
-                        <li>❌ Using floats for money, metrics, or anything requiring precision?</li>
-                        <li>❌ Enums without UNSPECIFIED at position 0?</li>
-                        <li>❌ Messages with more than 15 fields?</li>
-                        <li>❌ No versioning strategy in package names?</li>
-                        <li>❌ Strings for timestamps, dates, or durations?</li>
-                        <li>❌ No reserved field numbers for future use?</li>
-                        <li>❌ Generic field names like "data" or "metadata"?</li>
-                        <li>❌ Reusing message types across unrelated domains?</li>
-                        <li>❌ No documentation on field constraints?</li>
-                        <li>❌ Arrays without defined maximum sizes?</li>
+                        <li>6-month migration project</li>
+                        <li>All feature development paused</li>
+                        <li>Customer churn due to instability</li>
+                        <li>Key engineers leave from frustration</li>
                     </ul>
+                    <p><strong>Cost: ~$3,000,000+</strong></p>
+                </div>
 
-                    <p>If you checked more than 3, you're sitting on significant technical debt that's compounding daily.</p>
+                <h2>The ROI of Good API Design</h2>
 
-                    <h2>The Bottom Line</h2>
+                <p>Now let's flip the script. What's the value of getting it right from the start?</p>
 
-                    <p>Bad API design is one of the most expensive mistakes you can make in software. It's the gift that keeps on taking – from your velocity, your reliability, and your bank account.</p>
+                <div class="highlight-box">
+                    <h3>Velocity Gains</h3>
+                    <p>Teams with well-designed APIs ship features 40% faster. At a 50-person engineering org, that's equivalent to hiring 20 more engineers.</p>
+                    <p><strong>Value: $3M/year</strong></p>
+                </div>
 
-                    <p>The good news? It's entirely preventable. Every expensive mistake I've shown has a known solution. The patterns exist. The best practices are documented. And now, with AI, they can be automatically applied to every schema you create.</p>
+                <div class="highlight-box">
+                    <h3>Reduced Incidents</h3>
+                    <p>Good schemas prevent entire classes of bugs. 60% fewer production incidents means happier customers and sleeping engineers.</p>
+                    <p><strong>Value: $500K/year in reduced downtime</strong></p>
+                </div>
 
-                    <p>The question isn't whether you can afford to design APIs properly. It's whether you can afford not to.</p>
+                <div class="highlight-box">
+                    <h3>Partner Integration Speed</h3>
+                    <p>Clean APIs mean partners integrate in days, not months. Faster partnerships = faster growth.</p>
+                    <p><strong>Value: $1-5M in accelerated revenue</strong></p>
+                </div>
 
-                    <div class="cost-box">
-                        <h3>Your Next API Decision</h3>
-                        <p><strong>Option A:</strong> Rush the design, save 2 days now, pay $3M later</p>
-                        <p><strong>Option B:</strong> Use AI + best practices, ship in hours, sleep soundly</p>
-                        <p>The choice should be obvious.</p>
-                    </div>
+                <h2>How AI Changes the Economics</h2>
 
-                    <p><em>Don't let bad API design compound into millions in technical debt. Try protobuf.ai to generate schemas that encode decades of hard-won best practices.</em></p>
+                <p>This is where AI-assisted design becomes a game-changer. Consider the traditional process:</p>
+
+                <ul>
+                    <li>Senior engineer spends 2 days designing schema: $2,000</li>
+                    <li>Team review and iteration: 3 days: $6,000</li>
+                    <li>Still misses edge cases that cost millions later</li>
+                </ul>
+
+                <p>With AI assistance:</p>
+                <ul>
+                    <li>Generate initial schema in minutes</li>
+                    <li>AI flags all the expensive mistakes upfront</li>
+                    <li>Suggests patterns from analyzing thousands of successful APIs</li>
+                    <li>Total time: 2 hours instead of 5 days</li>
+                </ul>
+
+                <p>The AI doesn't just save time - it prevents the multi-million dollar mistakes by encoding best practices into every schema.</p>
+
+                <h2>The Checklist: Is Your API a Ticking Time Bomb?</h2>
+
+                <p>Run through this checklist. Each "yes" is a future migration waiting to happen:</p>
+
+                <ul>
+                    <li>Using floats for money, metrics, or anything requiring precision?</li>
+                    <li>Enums without UNSPECIFIED at position 0?</li>
+                    <li>Messages with more than 15 fields?</li>
+                    <li>No versioning strategy in package names?</li>
+                    <li>Strings for timestamps, dates, or durations?</li>
+                    <li>No reserved field numbers for future use?</li>
+                    <li>Generic field names like "data" or "metadata"?</li>
+                    <li>Reusing message types across unrelated domains?</li>
+                    <li>No documentation on field constraints?</li>
+                    <li>Arrays without defined maximum sizes?</li>
+                </ul>
+
+                <p>If you checked more than 3, you're sitting on significant technical debt that's compounding daily.</p>
+
+                <h2>The Bottom Line</h2>
+
+                <p>Bad API design is one of the most expensive mistakes you can make in software. It's the gift that keeps on taking - from your velocity, your reliability, and your bank account.</p>
+
+                <p>The good news? It's entirely preventable. Every expensive mistake I've shown has a known solution. The patterns exist. The best practices are documented. And now, with AI, they can be automatically applied to every schema you create.</p>
+
+                <p>The question isn't whether you can afford to design APIs properly. It's whether you can afford not to.</p>
+
+                <div class="highlight-box">
+                    <h3>Your Next API Decision</h3>
+                    <p><strong>Option A:</strong> Rush the design, save 2 days now, pay $3M later</p>
+                    <p><strong>Option B:</strong> Use AI + best practices, ship in hours, sleep soundly</p>
+                    <p>The choice should be obvious.</p>
+                </div>
+
+                <p><em>Don't let bad API design compound into millions in technical debt. Try protobuf.ai to generate schemas that encode decades of hard-won best practices.</em></p>
+
+                <div class="cta-section">
+                    <h2>Stop Paying for Bad API Design</h2>
+                    <p>Generate schemas that save millions in future migrations</p>
+                    <a href="/#waitlist-form" class="btn btn-white">Join Waitlist</a>
                 </div>
             </div>
-        </article>
+        </div>
+    </article>
 
-        <section class="cta-section">
-            <div class="container">
-                <h2>Stop Paying for Bad API Design</h2>
-                <p>Generate schemas that save millions in future migrations</p>
-                <a href="/#waitlist-form" class="btn">Join Waitlist</a>
+    <footer>
+        <div class="container-wide">
+            <div class="footer-inner">
+                <div>
+                    <div class="footer-brand">protobuf.ai</div>
+                    <p class="footer-tagline">The semantic layer for Protocol Buffers.</p>
+                    <p class="footer-copy">&copy; 2026 Voyant, LLC</p>
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/protobuf-ai/">GitHub</a>
+                    <a href="/registry.html">Registry</a>
+                    <a href="/blog/">Blog</a>
+                </div>
             </div>
-        </section>
-    </div>
+        </div>
+    </footer>
 </body>
 </html>
