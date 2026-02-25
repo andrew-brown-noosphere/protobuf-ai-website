@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Are Protobuf APIs Just for Internal Use? The Connect Inflection Point — protobuf.ai</title>
+    <meta name="description" content="Most protobuf APIs are internal today. But Connect protocol is changing that—and context.json is the missing piece for AI-native external APIs.">
+    <meta name="author" content="protobuf.ai">
+
+    <meta property="og:title" content="Are Protobuf APIs Just for Internal Use?">
+    <meta property="og:description" content="Most protobuf APIs are internal today. But Connect protocol is changing that.">
+    <meta property="og:url" content="https://protobuf.ai/blog/protobuf-apis-internal-to-external.html">
+    <meta property="og:type" content="article">
+
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --background: #f8fafc;
+            --foreground: #0f172a;
+            --primary: #b45309;
+            --primary-light: #d97706;
+            --primary-dark: #92400e;
+            --muted: #64748b;
+            --muted-light: #94a3b8;
+            --border: #e2e8f0;
+            --card: #ffffff;
+        }
+
+        body {
+            font-family: 'Source Serif 4', ui-serif, Georgia, 'Times New Roman', serif;
+            line-height: 1.7;
+            color: var(--foreground);
+            background: var(--background);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .container-wide {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Nav */
+        nav {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            font-size: 0.9375rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--foreground);
+            text-decoration: none;
+        }
+
+        /* Article Header */
+        .article-header {
+            padding: 4rem 0 2rem;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: var(--muted);
+            margin-bottom: 1rem;
+        }
+
+        .article-header h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--foreground);
+            line-height: 1.3;
+            margin-bottom: 1rem;
+        }
+
+        .article-header .lead {
+            font-size: 1.25rem;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        /* Article Content */
+        .article-content {
+            padding: 2rem 0 4rem;
+        }
+
+        .article-content h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--foreground);
+            margin: 2.5rem 0 1rem;
+        }
+
+        .article-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--foreground);
+            margin: 2rem 0 0.75rem;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content ul, .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-content strong {
+            font-weight: 600;
+        }
+
+        .article-content code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875em;
+            background: var(--border);
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+        }
+
+        .article-content pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1.25rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8125rem;
+            line-height: 1.6;
+        }
+
+        .article-content blockquote {
+            border-left: 3px solid var(--primary);
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            color: var(--muted);
+            font-style: italic;
+        }
+
+        .article-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            font-size: 0.9375rem;
+        }
+
+        .article-content th, .article-content td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .article-content th {
+            font-weight: 600;
+            background: var(--card);
+        }
+
+        .highlight-box {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--primary);
+            padding: 1.25rem;
+            border-radius: 0.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* CTA */
+        .article-cta {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .article-cta p {
+            margin-bottom: 1rem;
+            color: var(--muted);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.15s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-light);
+            text-decoration: none;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem 0;
+            margin-top: 2rem;
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .footer-tagline {
+            color: var(--muted);
+            font-size: 0.9375rem;
+            margin-top: 0.5rem;
+        }
+
+        .footer-copy {
+            font-size: 0.8125rem;
+            color: var(--muted-light);
+            margin-top: 0.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--muted);
+            font-size: 0.9375rem;
+        }
+
+        @media (max-width: 640px) {
+            .article-header h1 {
+                font-size: 1.75rem;
+            }
+            .nav-links {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container-wide">
+            <div class="nav-inner">
+                <a href="/" class="nav-brand">protobuf.ai</a>
+                <ul class="nav-links">
+                    <li><a href="/registry.html">Registry</a></li>
+                    <li><a href="/blog/">Blog</a></li>
+                    <li><a href="https://github.com/protobuf-ai/">GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <article>
+        <header class="article-header">
+            <div class="container">
+                <div class="article-meta">
+                    <span>Feb 25, 2026</span>
+                </div>
+                <h1>Are Protobuf APIs Just for Internal Use? The Connect Inflection Point</h1>
+                <p class="lead">Most protobuf APIs are internal today. But Connect protocol is changing that—and context.json is the missing piece for AI-native external APIs.</p>
+            </div>
+        </header>
+
+        <div class="article-content">
+            <div class="container">
+                <p>If you're building with Protocol Buffers, you've probably noticed something: almost everyone uses them for internal services. The moment you need to expose an API externally—to partners, third-party developers, or the public—the advice is usually "just use REST."</p>
+
+                <p>But that's changing. And if you're thinking about AI agents consuming your APIs, the change matters more than you might think.</p>
+
+                <h2>The Current State: 90% Internal</h2>
+
+                <p>Here's the honest breakdown of protobuf usage today:</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Usage Pattern</th>
+                            <th>Prevalence</th>
+                            <th>Examples</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Internal microservices</strong></td>
+                            <td>~90%</td>
+                            <td>Service-to-service within org</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mobile → Backend</strong></td>
+                            <td>Common</td>
+                            <td>App talking to its own servers</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Public cloud APIs</strong></td>
+                            <td>Growing</td>
+                            <td>Google Cloud, some AWS services</td>
+                        </tr>
+                        <tr>
+                            <td><strong>External partner APIs</strong></td>
+                            <td>Rare</td>
+                            <td>Fintech, gaming, IoT</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p>This isn't because protobuf is bad for external APIs. It's because of friction:</p>
+
+                <ul>
+                    <li><strong>Tooling complexity</strong> — External developers need codegen, proto files, and language-specific setup</li>
+                    <li><strong>Browser limitations</strong> — gRPC doesn't work natively in browsers (grpc-web is a workaround, not a solution)</li>
+                    <li><strong>REST inertia</strong> — External developers expect curl-friendly JSON endpoints</li>
+                    <li><strong>Documentation</strong> — REST/OpenAPI has better tooling for external developer portals</li>
+                </ul>
+
+                <p>So companies build with protobuf internally for the performance and type safety, then expose a separate REST API externally. Two interfaces, two sets of docs, two maintenance burdens.</p>
+
+                <h2>Connect: The Inflection Point</h2>
+
+                <p>The <a href="https://connectrpc.com/">Connect protocol</a> from Buf changes this equation.</p>
+
+                <p>Connect is simple: gRPC services that also speak HTTP/JSON natively. Same proto definition, but clients can choose their transport:</p>
+
+                <ul>
+                    <li><strong>Internal services</strong> → Use binary gRPC for efficiency</li>
+                    <li><strong>Browser clients</strong> → Use HTTP/JSON, no grpc-web needed</li>
+                    <li><strong>External developers</strong> → Use curl, standard HTTP clients</li>
+                    <li><strong>AI agents</strong> → Use whatever works</li>
+                </ul>
+
+                <p>One schema. Multiple transports. No translation layer.</p>
+
+                <div class="highlight-box">
+                    <p><strong>What this means:</strong> Companies can now build with protobuf from day one and expose the same APIs externally without maintaining a separate REST interface. The "internal vs. external" distinction starts to dissolve.</p>
+                </div>
+
+                <h2>The Missing Piece: Semantic Context</h2>
+
+                <p>Here's where it gets interesting for AI.</p>
+
+                <p>REST APIs have a well-established pattern for machine readability: OpenAPI specs with human-written descriptions. When an AI agent needs to understand a REST API, it reads the descriptions, examples, and documentation.</p>
+
+                <p>Protobuf has... comments in proto files.</p>
+
+                <pre>// User represents a registered user in the system.
+// The email field must be unique across all users.
+message User {
+  string id = 1;
+  string email = 2;      // Must be valid email format
+  string name = 3;
+  int64 created_at = 4;  // Unix timestamp, milliseconds
+}</pre>
+
+                <p>These comments help human developers, but they're unstructured. An AI agent reading this schema can see the <em>structure</em>—fields, types, relationships—but can't reliably understand the <em>semantics</em>:</p>
+
+                <ul>
+                    <li>What does <code>created_at</code> represent? Unix timestamp in seconds or milliseconds?</li>
+                    <li>Is <code>email</code> case-sensitive?</li>
+                    <li>Can <code>name</code> contain Unicode?</li>
+                    <li>What happens if you try to create a user with a duplicate email?</li>
+                </ul>
+
+                <p>The AI has to guess. Or read external documentation. Or make assumptions that might be wrong.</p>
+
+                <h2>context.json: The Semantic Layer</h2>
+
+                <p>This is what <code>context.json</code> solves. It's a machine-readable semantic layer that sits alongside your proto files:</p>
+
+                <pre>{
+  "@context": "https://protobuf.ai/ontology/v1",
+  "schema": "user.proto",
+  "messages": {
+    "User": {
+      "semanticType": "schema:Person",
+      "fields": {
+        "email": {
+          "maps_to": "schema:email",
+          "format": "RFC 5322",
+          "unique": true,
+          "case_sensitive": false
+        },
+        "created_at": {
+          "maps_to": "schema:dateCreated",
+          "unit": "milliseconds",
+          "format": "unix_timestamp"
+        }
+      }
+    }
+  },
+  "edge_cases": [
+    "Duplicate email returns ALREADY_EXISTS error",
+    "Name supports full Unicode (emoji allowed)"
+  ]
+}</pre>
+
+                <p>Now an AI agent can understand your API correctly on the first try. No guessing. No reverse-engineering documentation.</p>
+
+                <h2>Why This Matters Now</h2>
+
+                <p>The convergence is happening:</p>
+
+                <ol>
+                    <li><strong>Connect makes protobuf viable for external APIs</strong> — The browser/HTTP barrier is gone</li>
+                    <li><strong>AI agents are becoming API consumers</strong> — They need machine-readable semantics, not just structure</li>
+                    <li><strong>Schema-first development is winning</strong> — Teams want one source of truth, not OpenAPI + proto + docs</li>
+                </ol>
+
+                <p>If you're building APIs that will be consumed by AI agents—and increasingly, all APIs will be—you need both:</p>
+
+                <ul>
+                    <li><strong>Structure</strong> (proto files) — What fields exist, what types they have</li>
+                    <li><strong>Semantics</strong> (context.json) — What those fields mean, how to use them correctly</li>
+                </ul>
+
+                <h2>The Opportunity</h2>
+
+                <p>For teams already using protobuf internally:</p>
+
+                <ol>
+                    <li><strong>Add Connect</strong> — Expose your existing gRPC services over HTTP/JSON</li>
+                    <li><strong>Add context.json</strong> — Make your schemas AI-native</li>
+                    <li><strong>Publish to a registry</strong> — Let AI agents discover your APIs semantically</li>
+                </ol>
+
+                <p>Your internal services become external APIs. Your schemas become AI-readable. Your documentation stays in sync because it's generated from the same source.</p>
+
+                <p>The "internal vs. external" distinction was always artificial. Connect removes the transport barrier. context.json removes the semantic barrier.</p>
+
+                <p>What's left is just APIs—usable by humans, services, and AI agents alike.</p>
+
+                <div class="article-cta">
+                    <p>Ready to make your protobuf APIs AI-native?</p>
+                    <a href="https://github.com/protobuf-ai/" class="btn btn-primary">Get Started with context.json</a>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <footer>
+        <div class="container-wide">
+            <div class="footer-inner">
+                <div>
+                    <div class="footer-brand">protobuf.ai</div>
+                    <p class="footer-tagline">The semantic layer for Protocol Buffers.</p>
+                    <p class="footer-copy">&copy; 2026 Voyant, LLC</p>
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/protobuf-ai/">GitHub</a>
+                    <a href="/registry.html">Registry</a>
+                    <a href="/blog/">Blog</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
