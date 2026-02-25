@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Are Protobuf APIs Just for Internal Use? The Connect Inflection Point — protobuf.ai</title>
-    <meta name="description" content="Most protobuf APIs are internal today. But Connect protocol is changing that—and context.json is the missing piece for AI-native external APIs.">
+    <meta name="description" content="Most protobuf APIs are internal today. But Connect protocol is changing that—making protobuf viable for external APIs and AI agent consumption.">
     <meta name="author" content="protobuf.ai">
 
     <meta property="og:title" content="Are Protobuf APIs Just for Internal Use?">
@@ -328,7 +328,7 @@
                     <span>Feb 25, 2026</span>
                 </div>
                 <h1>Are Protobuf APIs Just for Internal Use? The Connect Inflection Point</h1>
-                <p class="lead">Most protobuf APIs are internal today. But Connect protocol is changing that—and context.json is the missing piece for AI-native external APIs.</p>
+                <p class="lead">Most protobuf APIs are internal today. But Connect protocol is changing that—making protobuf viable for external APIs and AI-assisted development.</p>
             </div>
         </header>
 
@@ -404,66 +404,20 @@
                     <p><strong>What this means:</strong> Companies can now build with protobuf from day one and expose the same APIs externally without maintaining a separate REST interface. The "internal vs. external" distinction starts to dissolve.</p>
                 </div>
 
-                <h2>The Missing Piece: Semantic Context</h2>
+                <h2>AI-Assisted Protobuf Development</h2>
 
-                <p>Here's where it gets interesting for AI.</p>
+                <p>Here's where it gets interesting. As protobuf moves from internal-only to external-facing, the tooling needs to keep up.</p>
 
-                <p>REST APIs have a well-established pattern for machine readability: OpenAPI specs with human-written descriptions. When an AI agent needs to understand a REST API, it reads the descriptions, examples, and documentation.</p>
+                <p>Writing proto files by hand is tedious. Field numbers, syntax rules, import paths, naming conventions—there's a lot to get right. And when you're exposing APIs externally, consistency matters even more.</p>
 
-                <p>Protobuf has... comments in proto files.</p>
-
-                <pre>// User represents a registered user in the system.
-// The email field must be unique across all users.
-message User {
-  string id = 1;
-  string email = 2;      // Must be valid email format
-  string name = 3;
-  int64 created_at = 4;  // Unix timestamp, milliseconds
-}</pre>
-
-                <p>These comments help human developers, but they're unstructured. An AI agent reading this schema can see the <em>structure</em>—fields, types, relationships—but can't reliably understand the <em>semantics</em>:</p>
+                <p>This is where AI-assisted development shines:</p>
 
                 <ul>
-                    <li>What does <code>created_at</code> represent? Unix timestamp in seconds or milliseconds?</li>
-                    <li>Is <code>email</code> case-sensitive?</li>
-                    <li>Can <code>name</code> contain Unicode?</li>
-                    <li>What happens if you try to create a user with a duplicate email?</li>
+                    <li><strong>Natural language generation</strong> — Describe your service, get correct proto3 syntax</li>
+                    <li><strong>Best practices enforcement</strong> — Consistent naming, proper field numbering, backwards-compatible changes</li>
+                    <li><strong>Schema discovery</strong> — Find existing schemas before creating duplicates</li>
+                    <li><strong>Documentation generation</strong> — Keep docs in sync with your schema</li>
                 </ul>
-
-                <p>The AI has to guess. Or read external documentation. Or make assumptions that might be wrong.</p>
-
-                <h2>context.json: The Semantic Layer</h2>
-
-                <p>This is what <code>context.json</code> solves. It's a machine-readable semantic layer that sits alongside your proto files:</p>
-
-                <pre>{
-  "@context": "https://protobuf.ai/ontology/v1",
-  "schema": "user.proto",
-  "messages": {
-    "User": {
-      "semanticType": "schema:Person",
-      "fields": {
-        "email": {
-          "maps_to": "schema:email",
-          "format": "RFC 5322",
-          "unique": true,
-          "case_sensitive": false
-        },
-        "created_at": {
-          "maps_to": "schema:dateCreated",
-          "unit": "milliseconds",
-          "format": "unix_timestamp"
-        }
-      }
-    }
-  },
-  "edge_cases": [
-    "Duplicate email returns ALREADY_EXISTS error",
-    "Name supports full Unicode (emoji allowed)"
-  ]
-}</pre>
-
-                <p>Now an AI agent can understand your API correctly on the first try. No guessing. No reverse-engineering documentation.</p>
 
                 <h2>Why This Matters Now</h2>
 
@@ -471,16 +425,11 @@ message User {
 
                 <ol>
                     <li><strong>Connect makes protobuf viable for external APIs</strong> — The browser/HTTP barrier is gone</li>
-                    <li><strong>AI agents are becoming API consumers</strong> — They need machine-readable semantics, not just structure</li>
+                    <li><strong>AI coding tools are mainstream</strong> — Claude, Copilot, and others are how developers work now</li>
                     <li><strong>Schema-first development is winning</strong> — Teams want one source of truth, not OpenAPI + proto + docs</li>
                 </ol>
 
-                <p>If you're building APIs that will be consumed by AI agents—and increasingly, all APIs will be—you need both:</p>
-
-                <ul>
-                    <li><strong>Structure</strong> (proto files) — What fields exist, what types they have</li>
-                    <li><strong>Semantics</strong> (context.json) — What those fields mean, how to use them correctly</li>
-                </ul>
+                <p>The question isn't whether to use protobuf for external APIs. It's how to do it efficiently.</p>
 
                 <h2>The Opportunity</h2>
 
@@ -488,19 +437,19 @@ message User {
 
                 <ol>
                     <li><strong>Add Connect</strong> — Expose your existing gRPC services over HTTP/JSON</li>
-                    <li><strong>Add context.json</strong> — Make your schemas AI-native</li>
-                    <li><strong>Publish to a registry</strong> — Let AI agents discover your APIs semantically</li>
+                    <li><strong>Use AI-assisted tooling</strong> — Generate schemas from natural language, enforce conventions automatically</li>
+                    <li><strong>Publish to a registry</strong> — Share schemas across your organization for discovery and reuse</li>
                 </ol>
 
-                <p>Your internal services become external APIs. Your schemas become AI-readable. Your documentation stays in sync because it's generated from the same source.</p>
+                <p>Your internal services become external APIs. Your schema definitions stay consistent. Your documentation generates from the same source.</p>
 
-                <p>The "internal vs. external" distinction was always artificial. Connect removes the transport barrier. context.json removes the semantic barrier.</p>
+                <p>The "internal vs. external" distinction was always artificial. Connect removes the transport barrier. AI tooling removes the productivity barrier.</p>
 
                 <p>What's left is just APIs—usable by humans, services, and AI agents alike.</p>
 
                 <div class="article-cta">
-                    <p>Ready to make your protobuf APIs AI-native?</p>
-                    <a href="https://github.com/protobuf-ai/" class="btn btn-primary">Get Started with context.json</a>
+                    <p>Ready to generate protobuf schemas with AI?</p>
+                    <a href="https://github.com/protobuf-ai/" class="btn btn-primary">Get Started with protobuf.ai</a>
                 </div>
             </div>
         </div>
@@ -511,7 +460,7 @@ message User {
             <div class="footer-inner">
                 <div>
                     <div class="footer-brand">protobuf.ai</div>
-                    <p class="footer-tagline">The semantic layer for Protocol Buffers.</p>
+                    <p class="footer-tagline">AI-powered Protocol Buffers generation and registry.</p>
                     <p class="footer-copy">&copy; 2026 Voyant, LLC</p>
                 </div>
                 <div class="footer-links">

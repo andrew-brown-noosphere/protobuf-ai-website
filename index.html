@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>protobuf.ai — Protocol Buffers for the AI Era</title>
-    <meta name="description" content="AI agents can read your schemas but can't understand them. context.json adds the semantic layer that makes your APIs AI-native.">
+    <meta name="description" content="Generate production-ready Protocol Buffers from natural language. MCP server for Claude, schema registry, and AI-powered best practices.">
     <meta name="author" content="protobuf.ai">
 
     <meta property="og:title" content="protobuf.ai — Protocol Buffers for the AI Era">
-    <meta property="og:description" content="Make your APIs AI-native with context.json - the semantic layer for Protocol Buffers.">
+    <meta property="og:description" content="Generate production-ready Protocol Buffers from natural language. MCP server for Claude and AI coding tools.">
     <meta property="og:url" content="https://protobuf.ai">
     <meta property="og:type" content="website">
 
@@ -392,11 +392,11 @@
         <section class="hero">
             <div class="container">
                 <h1>Protocol Buffers for the AI Era</h1>
-                <p class="hero-lead">AI agents can read your schemas. They just can't understand them.</p>
-                <p class="hero-sub"><strong>context.json</strong> adds the semantic layer that makes your APIs AI-native. Structure got us here. Meaning gets us where we're going.</p>
+                <p class="hero-lead">Describe your API in plain English. Get production-ready protobufs.</p>
+                <p class="hero-sub">MCP server for Claude and AI coding tools. Schema registry for discovery. Best practices enforced automatically.</p>
                 <div class="hero-cta">
                     <a href="https://github.com/protobuf-ai/" class="btn btn-primary">Get Started</a>
-                    <a href="/blog/introducing-protobuf-ai.html" class="btn btn-outline">Read the Manifesto</a>
+                    <a href="/blog/introducing-protobuf-ai.html" class="btn btn-outline">Learn More</a>
                 </div>
                 <p class="hero-note">Open source. MIT licensed.</p>
             </div>
@@ -418,47 +418,51 @@
         <section>
             <div class="container">
                 <h2>The problem</h2>
-                <p>When AI agents integrate with your API, they see field names and types. They don't know that <code>amount</code> is in cents, that <code>status</code> follows a state machine, or that refunds use negative values.</p>
-                <p>context.json gives every AI tool a single, always-current source of truth for what your schema actually means—so integrations work correctly without reverse-engineering your documentation.</p>
+                <p>Writing Protocol Buffers by hand is tedious. Field numbers, syntax rules, import paths, best practices—there's a lot to remember. And when you finally ship, half your schemas violate conventions your team agreed on months ago.</p>
+                <p>protobuf.ai generates schemas from natural language descriptions, enforces best practices automatically, and gives you a registry to share and discover schemas across your organization.</p>
             </div>
         </section>
 
         <section>
             <div class="container">
-                <h2>What context.json does</h2>
+                <h2>What you get</h2>
                 <ul class="features-list">
-                    <li><strong>AI Discovery:</strong> Developers ask "what should I use for payments?" and AI agents find your API through semantic search—not keyword matching.</li>
-                    <li><strong>Correct Implementation:</strong> AI understands that amount is in cents, currency is ISO 4217, and refunds use negative values. First integration works.</li>
-                    <li><strong>Ontology Validation:</strong> Map fields to schema.org or custom ontologies. Catch semantic mismatches before they become production bugs.</li>
-                    <li><strong>Cross-Schema Compatibility:</strong> Two APIs with different field names but the same meaning? context.json knows they're compatible.</li>
+                    <li><strong>Natural Language Generation:</strong> Describe your service in plain English. Get correct proto3 syntax with proper field numbers, types, and imports.</li>
+                    <li><strong>MCP Server:</strong> Works with Claude Desktop, Claude Code, and any MCP-compatible AI coding tool. Generate schemas right in your workflow.</li>
+                    <li><strong>Schema Registry:</strong> Publish and discover schemas across your organization. Search by name, domain, or description.</li>
+                    <li><strong>Best Practices Enforced:</strong> Consistent naming conventions, proper field numbering, backwards-compatible changes—automatically.</li>
                 </ul>
             </div>
         </section>
 
         <section>
             <div class="container">
-                <h2>Strategy-as-Code</h2>
-                <p>Your schema semantics, version-controlled and API-accessible.</p>
+                <h2>From English to Proto</h2>
+                <p>Describe what you need. Get production-ready schemas.</p>
                 <div class="code-section">
-                    <h3>payment.context.json</h3>
-                    <div class="code-block"><span class="comment">// Semantic layer for your proto</span>
-{
-  <span class="key">"@context"</span>: <span class="string">"https://protobuf.ai/ontology/v1"</span>,
-  <span class="key">"schema"</span>: <span class="string">"payment.proto"</span>,
-  <span class="key">"domain"</span>: <span class="string">"payments"</span>,
-  <span class="key">"messages"</span>: {
-    <span class="key">"Payment"</span>: {
-      <span class="key">"semanticType"</span>: <span class="string">"schema:PayAction"</span>,
-      <span class="key">"fields"</span>: {
-        <span class="key">"amount"</span>: { <span class="key">"maps_to"</span>: <span class="string">"schema:price"</span>, <span class="key">"unit"</span>: <span class="string">"cents"</span> },
-        <span class="key">"currency"</span>: { <span class="key">"format"</span>: <span class="string">"ISO 4217"</span> }
-      }
-    }
-  },
-  <span class="key">"edge_cases"</span>: [
-    <span class="string">"Refunds use negative amount"</span>,
-    <span class="string">"Status transitions: PENDING → COMPLETED | FAILED"</span>
-  ]
+                    <h3>You say:</h3>
+                    <div class="code-block"><span class="string">"I need a payment service with methods to process payments,
+issue refunds, and get payment status. Payments have an
+amount in cents, currency code, and merchant ID."</span></div>
+                </div>
+                <div class="code-section">
+                    <h3>You get: payment.proto</h3>
+                    <div class="code-block"><span class="key">syntax</span> = <span class="string">"proto3"</span>;
+
+<span class="key">package</span> payments.v1;
+
+<span class="key">service</span> PaymentService {
+  <span class="key">rpc</span> ProcessPayment(ProcessPaymentRequest) <span class="key">returns</span> (ProcessPaymentResponse);
+  <span class="key">rpc</span> RefundPayment(RefundPaymentRequest) <span class="key">returns</span> (RefundPaymentResponse);
+  <span class="key">rpc</span> GetPaymentStatus(GetPaymentStatusRequest) <span class="key">returns</span> (Payment);
+}
+
+<span class="key">message</span> Payment {
+  <span class="key">string</span> id = 1;
+  <span class="key">int64</span> amount_cents = 2;
+  <span class="key">string</span> currency_code = 3;  <span class="comment">// ISO 4217</span>
+  <span class="key">string</span> merchant_id = 4;
+  PaymentStatus status = 5;
 }</div>
                 </div>
             </div>
@@ -467,23 +471,23 @@
         <section>
             <div class="container">
                 <h2>How it works</h2>
-                <p>From schema to AI-native API in four steps.</p>
+                <p>From idea to schema in your existing workflow.</p>
                 <div class="steps">
                     <div class="step">
-                        <h3>1. Generate</h3>
-                        <p>AI analyzes your .proto and creates context.json automatically</p>
+                        <h3>1. Install</h3>
+                        <p>Add protobuf.ai MCP server to Claude Desktop or your IDE</p>
                     </div>
                     <div class="step">
-                        <h3>2. Refine</h3>
-                        <p>Add domain knowledge, edge cases, and relationships</p>
+                        <h3>2. Describe</h3>
+                        <p>Tell Claude what service you need in plain English</p>
                     </div>
                     <div class="step">
-                        <h3>3. Publish</h3>
-                        <p>Push to registry.protobuf.ai alongside your schema</p>
+                        <h3>3. Generate</h3>
+                        <p>Get production-ready proto3 with correct syntax and conventions</p>
                     </div>
                     <div class="step">
-                        <h3>4. Discover</h3>
-                        <p>AI agents find and correctly understand your API</p>
+                        <h3>4. Publish</h3>
+                        <p>Share to the registry for team discovery and reuse</p>
                     </div>
                 </div>
             </div>
@@ -491,8 +495,8 @@
 
         <section class="cta-section" id="get-started">
             <div class="container">
-                <h2>Make your APIs AI-native</h2>
-                <p>Stop letting AI guess your schema semantics. Give it the truth.</p>
+                <h2>Stop writing protobufs by hand</h2>
+                <p>Let AI handle the syntax. You focus on the design.</p>
                 <div class="cta-buttons">
                     <a href="https://github.com/protobuf-ai/" class="btn btn-primary">View on GitHub</a>
                     <a href="/registry.html" class="btn btn-outline">Explore the Registry</a>
@@ -506,7 +510,7 @@
             <div class="footer-inner">
                 <div>
                     <div class="footer-brand">protobuf.ai</div>
-                    <p class="footer-tagline">The semantic layer for Protocol Buffers.</p>
+                    <p class="footer-tagline">AI-powered Protocol Buffers generation and registry.</p>
                     <p class="footer-copy">&copy; 2026 Voyant, LLC</p>
                 </div>
                 <div class="footer-links">
