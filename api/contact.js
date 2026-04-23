@@ -1,5 +1,5 @@
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const CONTACT_FORWARD_TO = process.env.CONTACT_FORWARD_TO || 'andrew@voyant.io';
+const CONTACT_FORWARD_TO = process.env.CONTACT_FORWARD_TO || 'connect@protobuf.ai';
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -8,10 +8,10 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const { email, name, message } = req.body || {};
+    const { email, name, company, role, useCase, message } = req.body || {};
 
-    if (!email || !name || !message) {
-      return res.status(400).json({ error: 'Name, email, and message are required' });
+    if (!email || !name || !useCase) {
+      return res.status(400).json({ error: 'Name, email, and use case are required' });
     }
 
     if (!emailRegex.test(email)) {
@@ -22,29 +22,44 @@ module.exports = async function handler(req, res) {
       return res.status(500).json({ error: 'Email service not configured' });
     }
 
+    const companyInfo = company ? `${company}${role ? ` (${role})` : ''}` : (role || 'Not specified');
+
     const payload = {
-      from: 'protobuf.ai Contact <contact@protobuf.ai>',
+      from: 'protobuf.ai <contact@protobuf.ai>',
       to: CONTACT_FORWARD_TO,
       reply_to: email,
-      subject: `protobuf.ai Contact: ${name}`,
+      subject: `[protobuf.ai] ${name}${company ? ` from ${company}` : ''}`,
       html: `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, '<br>')}</p>
-        <hr>
-        <p><small>Submitted at: ${new Date().toLocaleString()}</small></p>
+        <h2>New Developer Inquiry</h2>
+        <table style="border-collapse: collapse; margin: 1rem 0;">
+          <tr><td style="padding: 0.5rem 1rem 0.5rem 0; font-weight: bold; vertical-align: top;">Name:</td><td style="padding: 0.5rem 0;">${name}</td></tr>
+          <tr><td style="padding: 0.5rem 1rem 0.5rem 0; font-weight: bold; vertical-align: top;">Email:</td><td style="padding: 0.5rem 0;"><a href="mailto:${email}">${email}</a></td></tr>
+          <tr><td style="padding: 0.5rem 1rem 0.5rem 0; font-weight: bold; vertical-align: top;">Company/Role:</td><td style="padding: 0.5rem 0;">${companyInfo}</td></tr>
+        </table>
+
+        <h3 style="margin-top: 1.5rem;">What they're working on:</h3>
+        <p style="background: #f5f5f5; padding: 1rem; border-radius: 4px;">${useCase.replace(/\n/g, '<br>')}</p>
+
+        ${message ? `
+        <h3 style="margin-top: 1.5rem;">Additional comments:</h3>
+        <p style="background: #f5f5f5; padding: 1rem; border-radius: 4px;">${message.replace(/\n/g, '<br>')}</p>
+        ` : ''}
+
+        <hr style="margin-top: 2rem; border: none; border-top: 1px solid #ddd;">
+        <p style="color: #666; font-size: 0.875rem;">Submitted: ${new Date().toLocaleString()}</p>
       `,
-      text: `New Contact Form Submission
+      text: `New Developer Inquiry
 
 Name: ${name}
 Email: ${email}
+Company/Role: ${companyInfo}
 
-Message:
-${message}
+What they're working on:
+${useCase}
 
-Submitted at: ${new Date().toLocaleString()}`
+${message ? `Additional comments:\n${message}\n` : ''}
+---
+Submitted: ${new Date().toLocaleString()}`
     };
 
     const emailResponse = await fetch('https://api.resend.com/emails', {

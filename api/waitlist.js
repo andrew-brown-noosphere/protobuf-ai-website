@@ -1,5 +1,5 @@
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const WAITLIST_FORWARD_TO = process.env.WAITLIST_FORWARD_TO || 'andrew@voyant.io';
+const WAITLIST_FORWARD_TO = process.env.WAITLIST_FORWARD_TO || 'connect@protobuf.ai';
 
 const fallbackResponse = (name, useCase, message) => {
   const useCaseMap = {

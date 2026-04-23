@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>protobuf.ai — Protocol Buffers for the AI Era</title>
-    <meta name="description" content="Generate production-ready Protocol Buffers from natural language. MCP server for Claude, schema registry, and AI-powered best practices.">
+    <title>protobuf.ai — Turn protobuf streams into agent-friendly context</title>
+    <meta name="description" content="Schemas as context for AI systems. MCP-native protobuf tooling, cross-registry federation, and streaming-ready deployment to Redpanda and Confluent.">
     <meta name="author" content="protobuf.ai">
 
-    <meta property="og:title" content="protobuf.ai — Protocol Buffers for the AI Era">
-    <meta property="og:description" content="Generate production-ready Protocol Buffers from natural language. MCP server for Claude and AI coding tools.">
+    <meta property="og:title" content="protobuf.ai — Turn protobuf streams into agent-friendly context">
+    <meta property="og:description" content="Schemas as context for AI systems. The neutral layer across Buf, Redpanda, and Confluent — built for agents.">
     <meta property="og:url" content="https://protobuf.ai">
     <meta property="og:type" content="website">
 
@@ -353,8 +353,20 @@
         }
 
         .form-group textarea {
-            min-height: 120px;
+            min-height: 100px;
             resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 640px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
         }
 
         .form-submit {
@@ -456,9 +468,9 @@
     <main>
         <section class="hero">
             <div class="container">
-                <h1>Protocol Buffers for the AI Era</h1>
-                <p class="hero-lead">Describe your API in plain English. Get production-ready protobufs.</p>
-                <p class="hero-sub">MCP server for Claude and AI coding tools. Schema registry for discovery. Best practices enforced automatically.</p>
+                <h1>Turn protobuf streams into agent-friendly context.</h1>
+                <p class="hero-lead">Schemas are becoming context for AI systems — not just contracts between services, but semantic anchors that agents use to understand what data means.</p>
+                <p class="hero-sub">MCP-native tooling. Cross-registry federation. Streaming-ready. Built for the world where agents write, read, and reason about schemas.</p>
                 <div class="hero-cta">
                     <a href="https://github.com/protobuf-ai/" class="btn btn-primary">Get Started</a>
                     <a href="/blog/introducing-protobuf-ai.html" class="btn btn-outline">Learn More</a>
@@ -469,22 +481,22 @@
 
         <section class="integrations">
             <div class="container-wide">
-                <p class="integrations-label">Works with your existing protobuf tools</p>
+                <p class="integrations-label">The neutral layer — works with all of them</p>
                 <div class="integrations-logos">
                     <span>Buf</span>
+                    <span>Redpanda</span>
+                    <span>Confluent</span>
                     <span>gRPC</span>
                     <span>Connect</span>
-                    <span>protoc</span>
-                    <span>Schema Registry</span>
                 </div>
             </div>
         </section>
 
         <section>
             <div class="container">
-                <h2>The problem</h2>
-                <p>Writing Protocol Buffers by hand is tedious. Field numbers, syntax rules, import paths, best practices—there's a lot to remember. And when you finally ship, half your schemas violate conventions your team agreed on months ago.</p>
-                <p>protobuf.ai generates schemas from natural language descriptions, enforces best practices automatically, and gives you a registry to share and discover schemas across your organization.</p>
+                <h2>The shift</h2>
+                <p>Most protobuf tooling optimizes for a world where humans write and read schemas. But that world is ending. AI agents are already generating code, consuming APIs, and reasoning about data structures. They need schemas they can understand semantically — not just parse syntactically.</p>
+                <p>protobuf.ai treats schemas as <strong>context</strong>: machine-readable meaning that travels with your data. Generate from natural language. Publish to a registry agents can query. Deploy directly to streaming infrastructure. Work across Buf, Confluent, and Redpanda without lock-in.</p>
             </div>
         </section>
 
@@ -492,10 +504,10 @@
             <div class="container">
                 <h2>What you get</h2>
                 <ul class="features-list">
-                    <li><strong>Natural Language Generation:</strong> Describe your service in plain English. Get correct proto3 syntax with proper field numbers, types, and imports.</li>
-                    <li><strong>MCP Server:</strong> Works with Claude Desktop, Claude Code, and any MCP-compatible AI coding tool. Generate schemas right in your workflow.</li>
-                    <li><strong>Schema Registry:</strong> Publish and discover schemas across your organization. Search by name, domain, or description.</li>
-                    <li><strong>Best Practices Enforced:</strong> Consistent naming conventions, proper field numbering, backwards-compatible changes—automatically.</li>
+                    <li><strong>MCP-Native Tooling:</strong> The first protobuf server built for Model Context Protocol. Claude and AI coding tools can generate, validate, and publish schemas directly.</li>
+                    <li><strong>Cross-Registry Federation:</strong> Migrate from Buf. Deploy to Redpanda. Push to Confluent. One tool, no lock-in.</li>
+                    <li><strong>Streaming-Ready:</strong> Deploy schemas directly to Redpanda — creates topics, registers schemas, generates producer/consumer code.</li>
+                    <li><strong>Semantic Context:</strong> Schemas that carry meaning, not just structure. Built for agents that need to understand what data represents.</li>
                 </ul>
             </div>
         </section>
@@ -560,8 +572,8 @@ amount in cents, currency code, and merchant ID."</span></div>
 
         <section class="cta-section" id="get-started">
             <div class="container">
-                <h2>Stop writing protobufs by hand</h2>
-                <p>Let AI handle the syntax. You focus on the design.</p>
+                <h2>Schemas for the agent era</h2>
+                <p>The protobuf ecosystem is fragmenting. We're the neutral layer that works with all of it — and built for AI-native workflows.</p>
                 <div class="cta-buttons">
                     <a href="https://github.com/protobuf-ai/" class="btn btn-primary">View on GitHub</a>
                     <a href="/registry.html" class="btn btn-outline">Explore the Registry</a>
@@ -572,19 +584,35 @@ amount in cents, currency code, and merchant ID."</span></div>
         <section class="contact-section" id="contact">
             <div class="container">
                 <h2>Get in Touch</h2>
-                <p class="contact-subtitle">Questions about protobuf.ai? Want to discuss enterprise features? Drop us a line.</p>
+                <p class="contact-subtitle">Building with protobuf? Exploring schema tooling for your team? Let's talk.</p>
                 <form class="contact-form" id="contactForm">
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" name="name" required>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Work Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="company">Company</label>
+                            <input type="text" id="company" name="company" placeholder="Optional">
+                        </div>
+                        <div class="form-group">
+                            <label for="role">Role</label>
+                            <input type="text" id="role" name="role" placeholder="e.g. Backend Engineer">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
+                        <label for="useCase">What are you working on?</label>
+                        <textarea id="useCase" name="useCase" placeholder="e.g. Migrating REST APIs to gRPC, building event-driven microservices, exploring schema registries..." required></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" name="message" required></textarea>
+                        <label for="message">Questions or comments</label>
+                        <textarea id="message" name="message" placeholder="Anything specific you'd like to discuss?"></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary form-submit">Send Message</button>
                     <p id="formStatus" style="margin-top: 1rem; text-align: center;"></p>
@@ -610,6 +638,9 @@ amount in cents, currency code, and merchant ID."</span></div>
                     body: JSON.stringify({
                         name: form.name.value,
                         email: form.email.value,
+                        company: form.company.value,
+                        role: form.role.value,
+                        useCase: form.useCase.value,
                         message: form.message.value
                     })
                 });
@@ -625,7 +656,7 @@ amount in cents, currency code, and merchant ID."</span></div>
                 }
             } catch (err) {
                 status.style.color = '#dc2626';
-                status.textContent = 'Failed to send. Please email andrew@voyant.io directly.';
+                status.textContent = 'Failed to send. Please email connect@protobuf.ai directly.';
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Send Message';
@@ -639,7 +670,7 @@ amount in cents, currency code, and merchant ID."</span></div>
             <div class="footer-inner">
                 <div>
                     <div class="footer-brand">protobuf.ai</div>
-                    <p class="footer-tagline">AI-powered Protocol Buffers generation and registry.</p>
+                    <p class="footer-tagline">Protocol Buffers for the agent era.</p>
                     <p class="footer-copy">&copy; 2026 Voyant, LLC</p>
                 </div>
                 <div class="footer-links">
